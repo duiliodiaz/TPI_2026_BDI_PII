@@ -1,1 +1,4 @@
-<Solution />
+<Solution>
+  <Project Path="CineApp.Back/CineApp.Back.csproj" Id="76823787-f33e-4516-a9d2-46bf823bf3a3" />
+  <Project Path="CineApp.WebAPI/CineApp.WebAPI.csproj" Id="ab448cae-6946-4eab-86de-535056768af6" />
+</Solution>

@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Soluciones-Poryectos Lenguajes de Programaci\u00F3n\\Ejercicios - VS\\REPO_TPI_BDI_PII\\Cine_TPI_2026\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Soluciones-Poryectos Lenguajes de Programaci\u00F3n\\Ejercicios - VS\\TPI_2026_BDI_PII\\Cine_TPI_2026\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{76823787-F33E-4516-A9D2-46BF823BF3A3}|CineApp.Back\\CineApp.Back.csproj|c:\\soluciones-poryectos lenguajes de programaci\u00F3n\\ejercicios - vs\\tpi_2026_bdi_pii\\cine_tpi_2026\\cineapp.back\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76823787-F33E-4516-A9D2-46BF823BF3A3}|CineApp.Back\\CineApp.Back.csproj|solutionrelative:cineapp.back\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Soluciones-Poryectos Lenguajes de Programaci\u00F3n\\Ejercicios - VS\\TPI_2026_BDI_PII\\Cine_TPI_2026\\CineApp.Back\\Class1.cs",
+              "RelativeDocumentMoniker": "CineApp.Back\\Class1.cs",
+              "ToolTip": "C:\\Soluciones-Poryectos Lenguajes de Programaci\u00F3n\\Ejercicios - VS\\TPI_2026_BDI_PII\\Cine_TPI_2026\\CineApp.Back\\Class1.cs",
+              "RelativeToolTip": "CineApp.Back\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-14T23:25:33.724Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
