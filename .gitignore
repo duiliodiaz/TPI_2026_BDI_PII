@@ -483,3 +483,12 @@ $RECYCLE.BIN/
 
 # Configuración local de DB de cada integrante
 **/appsettings.Development.json
+
+# Carpetas de compilación y caché de VS
+**/bin/
+**/obj/
+**/.vs/
+
+# Archivos temporales o de usuario
+*.user
+*.suo
