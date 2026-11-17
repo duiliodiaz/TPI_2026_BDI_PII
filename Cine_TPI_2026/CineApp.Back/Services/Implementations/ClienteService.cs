@@ -35,6 +35,7 @@ namespace CineApp.Back.Services.Implementations
             cliente.Apellido = dto.Apellido.Trim();
             cliente.Dni = dto.Dni;
             cliente.EMail = dto.EMail;
+            cliente.Activo = dto.Activo;
 
             return await _clienteRepository.UpdateClienteAsync(cliente);
         }

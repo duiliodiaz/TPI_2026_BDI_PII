@@ -38,6 +38,7 @@ namespace CineApp.Back.Services.Implementations
             producto.PreUnitario = dto.PreUnitario;
             producto.IdTipoProducto = dto.IdTipoProducto;
             producto.IdTamañoProducto = dto.IdTamañoProducto;
+            producto.Activo = dto.Activo;
 
             return await _productoRepository.UpdateProductoAsync(producto);
         }
