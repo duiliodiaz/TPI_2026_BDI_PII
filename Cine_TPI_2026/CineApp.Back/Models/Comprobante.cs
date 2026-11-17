@@ -13,6 +13,8 @@ public partial class Comprobante
 
     public int IdFormaPago { get; set; }
 
+    public bool Activo { get; set; } = true;
+
     public virtual ICollection<DetallesComprobanteProducto> DetallesComprobanteProductos { get; set; } = new List<DetallesComprobanteProducto>();
 
     public virtual ICollection<Entrada> Entrada { get; set; } = new List<Entrada>();

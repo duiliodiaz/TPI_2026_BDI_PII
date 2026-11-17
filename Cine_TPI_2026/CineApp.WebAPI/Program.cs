@@ -15,9 +15,14 @@ builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ITamañoProductoRepository, TamañoProductoRepository>();
 builder.Services.AddScoped<ITipoProductoRepository, TipoProductoRepository>();
 
+builder.Services.AddScoped<IFormaPagoRepository, FormaPagoRepository>();
+builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
+
 builder.Services.AddScoped<ICatalogoProductoService, CatalogoProductoService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
+
+builder.Services.AddScoped<IComprobanteService, ComprobanteService>();
 
 // Add services to the container.
 
