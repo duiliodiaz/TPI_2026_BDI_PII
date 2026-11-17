@@ -15,6 +15,8 @@ public partial class Cliente
 
     public string? EMail { get; set; }
 
+    public bool Activo { get; set; } = true;
+
     public virtual ICollection<Comprobante> Comprobantes { get; set; } = new List<Comprobante>();
 
     public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();

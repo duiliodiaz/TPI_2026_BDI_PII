@@ -15,6 +15,8 @@ public partial class Producto
 
     public int IdTamañoProducto { get; set; }
 
+    public bool Activo { get; set; } = true;
+
     public virtual ICollection<DetallesComprobanteProducto> DetallesComprobanteProductos { get; set; } = new List<DetallesComprobanteProducto>();
 
     public virtual TamañosProducto IdTamañoProductoNavigation { get; set; } = null!;

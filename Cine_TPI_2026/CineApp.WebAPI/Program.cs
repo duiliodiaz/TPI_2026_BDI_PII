@@ -1,4 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using CineApp.Back.Data;
+using CineApp.Back.Repositories.Interfaces;
+using CineApp.Back.Repositories.Implementations;
+using CineApp.Back.Services.Interfaces;
+using CineApp.Back.Services.Implementations;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<CineDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<ITamañoProductoRepository, TamañoProductoRepository>();
+builder.Services.AddScoped<ITipoProductoRepository, TipoProductoRepository>();
+
+builder.Services.AddScoped<ICatalogoProductoService, CatalogoProductoService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
 
 // Add services to the container.
 
