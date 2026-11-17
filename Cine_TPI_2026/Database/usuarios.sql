@@ -18,5 +18,5 @@ GO
 
 IF NOT EXISTS (SELECT 1 FROM usuarios WHERE nombre_usuario = 'admin')
     INSERT INTO usuarios (nombre_usuario, password, email, rol)
-    VALUES ('admin', 'admin123', 'admin@cine.com', 'Admin');
+    VALUES ('admin', 'admin123', 'admin@cine.com', 'Administrador');
 GO
