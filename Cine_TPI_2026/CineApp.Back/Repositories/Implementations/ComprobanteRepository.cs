@@ -65,11 +65,12 @@ namespace CineApp.Back.Repositories.Implementations
 
         public async Task<bool> UpdateComprobanteAsync(Comprobante comprobante, List<DetallesComprobanteProducto> nuevosDetalles)
         {
-            _context.DetallesComprobanteProductos.RemoveRange(comprobante.DetallesComprobanteProductos);
+            if (comprobante.DetallesComprobanteProductos != null && comprobante.DetallesComprobanteProductos.Count > 0)
+            { // si tiene detalles los elimina
+                _context.DetallesComprobanteProductos.RemoveRange(comprobante.DetallesComprobanteProductos);
+            }
 
             comprobante.DetallesComprobanteProductos = nuevosDetalles;
-
-            _context.Comprobantes.Update(comprobante);
 
             return await _context.SaveChangesAsync() > 0;
         }

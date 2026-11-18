@@ -21,7 +21,14 @@ namespace CineApp.Back.Repositories.Implementations
 
         public async Task<List<FormasPago>> GetAllFormasPagoAsync()
         {
-            return await _context.FormasPagos.ToListAsync();
+            return await _context.FormasPagos
+                .ToListAsync();
+        }
+
+        public async Task<bool> ExistsAsync(int idFormaPago)
+        {
+            return await _context.FormasPagos
+                .AnyAsync(fp => fp.IdFormaPago == idFormaPago);
         }
     }
 }

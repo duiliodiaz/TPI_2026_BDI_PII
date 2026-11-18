@@ -1,4 +1,5 @@
-﻿using CineApp.Back.DTOs.Comprobantes;
+﻿using CineApp.Back.DTOs;
+using CineApp.Back.Services.Implementations;
 using CineApp.Back.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +10,17 @@ namespace CineApp.WebAPI.Controllers
     [ApiController]
     public class ComprobantesController : ControllerBase
     {
-        private readonly IComprobanteService _comprobanteService;
+        private readonly IComprobanteService _service;
 
         public ComprobantesController(IComprobanteService comprobanteService)
         {
-            _comprobanteService = comprobanteService;
+            _service = comprobanteService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllComprobantes()
         {
-            var comprobantes = await _comprobanteService.ObtenerTodosComprobantesAsync();
+            var comprobantes = await _service.ObtenerTodosComprobantesAsync();
 
             return Ok(comprobantes);
         }
@@ -27,12 +28,10 @@ namespace CineApp.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetComprobanteById(int id)
         {
-            var comprobante = await _comprobanteService.ObtenerComprobantePorIdAsync(id);
+            var comprobante = await _service.ObtenerComprobantePorIdAsync(id);
 
             if (comprobante == null)
-            {
                 return NotFound("Comprobante no encontrado.");
-            }
 
             return Ok(comprobante);
         }
@@ -40,39 +39,42 @@ namespace CineApp.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateComprobante([FromBody] ComprobanteRequestDTO dto)
         {
-            bool creado = await _comprobanteService.AñadirComprobanteAsync(dto);
+            var creado = await _service.AñadirComprobanteAsync(dto);
 
-            if (!creado)
-            {
-                return BadRequest("No se pudo registrar el comprobante. Verifique cliente, forma de pago y detalles.");
-            }
+            if (!creado.Exito)
+                return BadRequest(new { mensaje = creado.Mensaje });
 
-            return Ok(new { mensaje = "Comprobante registrado exitosamente." });
+            return Ok(new { mensaje = creado.Mensaje });
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComprobante(int id, [FromBody] ComprobanteRequestDTO dto)
         {
-            bool actualizado = await _comprobanteService.ActualizarComprobanteAsync(id, dto);
+            if (id <= 0)
+                return BadRequest(new { mensaje = "El ID del comprobante debe ser mayor a cero." });
 
-            if (!actualizado)
-            {
-                return NotFound("No se encontró el comprobante activo o los datos son inválidos.");
-            }
+            if (dto.IdComprobante != 0 && id != dto.IdComprobante)
+                return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID del comprobante enviado." });
 
-            return Ok(new { mensaje = "Comprobante actualizado exitosamente." });
+            var actualizado = await _service.ActualizarComprobanteAsync(id, dto);
+
+            if (!actualizado.Exito)
+                return BadRequest(new { mensaje = actualizado.Mensaje });
+
+            return Ok(new { mensaje = actualizado.Mensaje });
         }
 
         // DELETE: api/Comprobantes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComprobante(int id)
         {
-            bool eliminado = await _comprobanteService.EliminarComprobanteAsync(id);
+            if (id <= 0)
+                return BadRequest(new { mensaje = "El ID del comprobante debe ser mayor a cero." });
+
+            bool eliminado = await _service.EliminarComprobanteAsync(id);
 
             if (!eliminado)
-            {
                 return NotFound("Comprobante no encontrado.");
-            }
 
             return Ok(new { mensaje = "Comprobante dado de baja exitosamente." });
         }
@@ -80,7 +82,7 @@ namespace CineApp.WebAPI.Controllers
         [HttpGet("formas-pago")]
         public async Task<IActionResult> GetAllFormasPago()
         {
-            var formasPago = await _comprobanteService.ObtenerTodasFormasPagoAsync();
+            var formasPago = await _service.ObtenerTodasFormasPagoAsync();
 
             // evitando bucle infinito con la litsa de Comprobantes
             var resultado = formasPago.Select(f => new { f.IdFormaPago, f.Descripcion });

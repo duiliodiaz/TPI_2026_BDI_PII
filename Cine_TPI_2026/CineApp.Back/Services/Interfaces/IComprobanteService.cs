@@ -1,4 +1,4 @@
-﻿using CineApp.Back.DTOs.Comprobantes;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ComprobanteResponseDTO?> ObtenerComprobantePorIdAsync(int id);
 
-        Task<bool> AñadirComprobanteAsync(ComprobanteRequestDTO dto);
+        Task<(bool Exito, string Mensaje)> AñadirComprobanteAsync(ComprobanteRequestDTO dto);
 
-        Task<bool> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto);
+        Task<(bool Exito, string Mensaje)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto);
 
         Task<bool> EliminarComprobanteAsync(int id);
 

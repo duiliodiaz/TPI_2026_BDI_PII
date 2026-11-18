@@ -1,5 +1,6 @@
-﻿using CineApp.Back.DTOs.Comprobantes;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Models;
+using CineApp.Back.Repositories.Implementations;
 using CineApp.Back.Repositories.Interfaces;
 using CineApp.Back.Services.Interfaces;
 using System;
@@ -15,38 +16,65 @@ namespace CineApp.Back.Services.Implementations
         private readonly IComprobanteRepository _comprobanteRepository;
         private readonly IFormaPagoRepository _formaPagoRepository;
         private readonly IProductoRepository _productoRepository;
+        private readonly IClienteRepository _clienteRepository;
 
         public ComprobanteService(
-            IComprobanteRepository comprobanteRepo,
-            IFormaPagoRepository formaPagoRepo,
-            IProductoRepository productoRepo)
+            IComprobanteRepository comprobanteRepository,
+            IFormaPagoRepository formaPagoRepository,
+            IProductoRepository productoRepository,
+            IClienteRepository clienteRepository)
         {
-            _comprobanteRepository = comprobanteRepo;
-            _formaPagoRepository = formaPagoRepo;
-            _productoRepository = productoRepo;
+            _comprobanteRepository = comprobanteRepository;
+            _formaPagoRepository = formaPagoRepository;
+            _productoRepository = productoRepository;
+            _clienteRepository = clienteRepository;
         }
 
-        public async Task<bool> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto)
         {
-            if (dto.IdCliente <= 0 || dto.IdFormaPago <= 0 || dto.Detalles == null || dto.Detalles.Count == 0)
-                return false;
-
             var comprobanteExistente = await _comprobanteRepository.GetComprobanteByIdAsync(id);
 
-            if (comprobanteExistente == null)
-                return false;
+            if (comprobanteExistente == null || !comprobanteExistente.Activo)
+                return (false, "El comprobante no existe o ya fue anulado, no se puede modificar.");
+
+            // validar que tenga al menos un detalle
+            if (dto.Detalles == null || dto.Detalles.Count == 0)
+                return (false, "El comprobante debe contener al menos un producto.");
+
+            // validar que el detalle no tenga productos duplicados (ej 2 veces coca)
+            var productosDuplicados = dto.Detalles
+                .GroupBy(d => d.IdProducto)
+                .Any(g => g.Count() > 1);
+
+            if (productosDuplicados)
+                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.");
+
+            var fechaComprobante = dto.Fecha;
+            // no permite fechas posteriores a ahora
+            if (fechaComprobante > DateTime.Now)
+                return (false, "La fecha del comprobante no puede ser futura.");
+
+            var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
+            // validar cliente existente y activo
+            if (cliente == null || !cliente.Activo)
+                return (false, "El cliente seleccionado no existe o está dado de baja.");
+
+            var formaPagoExiste = await _formaPagoRepository.ExistsAsync(dto.IdFormaPago);
+
+            if (!formaPagoExiste)
+                return (false, "La forma de pago seleccionada no es válida.");
 
             var nuevosDetalles = new List<DetallesComprobanteProducto>();
 
             foreach (var detalle in dto.Detalles)
             {
                 if (detalle.CantidadProductos <= 0)
-                    return false;
+                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.");
 
                 var producto = await _productoRepository.GetProductoByIdAsync(detalle.IdProducto);
 
-                if (producto == null)
-                    return false;
+                if (producto == null || !producto.Activo)
+                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.");
 
                 nuevosDetalles.Add(new DetallesComprobanteProducto
                 {
@@ -61,25 +89,52 @@ namespace CineApp.Back.Services.Implementations
             comprobanteExistente.Fecha = dto.Fecha;
             comprobanteExistente.IdFormaPago = dto.IdFormaPago;
 
-            return await _comprobanteRepository.UpdateComprobanteAsync(comprobanteExistente, nuevosDetalles);
+            var actualizado = await _comprobanteRepository.UpdateComprobanteAsync(comprobanteExistente, nuevosDetalles);
+
+            if (actualizado)
+                return (true, "Comprobante registrado correctamente.");
+            else
+                return (false, "Ocurrió un error al intentar actualizar el comprobante.");
         }
 
-        public async Task<bool> AñadirComprobanteAsync(ComprobanteRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje)> AñadirComprobanteAsync(ComprobanteRequestDTO dto)
         {
-            if (dto.IdCliente <= 0 || dto.IdFormaPago <= 0 || dto.Detalles == null || dto.Detalles.Count == 0)
-                return false;
+            if (dto.Detalles == null || dto.Detalles.Count == 0)
+                return (false, "El comprobante debe contener al menos un producto.");
+
+            var productosDuplicados = dto.Detalles
+                .GroupBy(d => d.IdProducto)
+                .Any(g => g.Count() > 1);
+
+            if (productosDuplicados)
+                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.");
+
+            var fechaComprobante = dto.Fecha;
+
+            if (fechaComprobante > DateTime.Now)
+                return (false, "La fecha del comprobante no puede ser futura.");
+
+            var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
+
+            if (cliente == null || !cliente.Activo)
+                return (false, "El cliente seleccionado no existe o está dado de baja.");
+
+            var formaPagoExiste = await _formaPagoRepository.ExistsAsync(dto.IdFormaPago);
+
+            if (!formaPagoExiste)
+                return (false, "La forma de pago seleccionada no es válida.");
 
             var detallesComprobante = new List<DetallesComprobanteProducto>();
 
             foreach (var detalle in dto.Detalles)
             {
                 if (detalle.CantidadProductos <= 0)
-                    return false;
+                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.");
 
                 var producto = await _productoRepository.GetProductoByIdAsync(detalle.IdProducto);
 
-                if (producto == null)
-                    return false;
+                if (producto == null || !producto.Activo)
+                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.");
 
                 detallesComprobante.Add(new DetallesComprobanteProducto
                 {
@@ -98,7 +153,12 @@ namespace CineApp.Back.Services.Implementations
                 DetallesComprobanteProductos = detallesComprobante
             };
 
-            return await _comprobanteRepository.AddComprobanteAsync(nuevoComprobante);
+            var creado = await _comprobanteRepository.AddComprobanteAsync(nuevoComprobante);
+
+            if (creado)
+                return (true, "Comprobante registrado correctamente.");
+            else
+                return (false, "Ocurrió un error al intentar crear el comprobante.");
         }
 
         public async Task<bool> EliminarComprobanteAsync(int id)

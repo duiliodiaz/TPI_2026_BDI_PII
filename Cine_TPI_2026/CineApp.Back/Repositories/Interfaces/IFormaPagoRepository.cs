@@ -10,5 +10,7 @@ namespace CineApp.Back.Repositories.Interfaces
     public interface IFormaPagoRepository
     {
         Task<List<FormasPago>> GetAllFormasPagoAsync();
+
+        Task<bool> ExistsAsync(int id);
     }
 }
