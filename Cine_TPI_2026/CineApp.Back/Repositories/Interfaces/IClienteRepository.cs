@@ -1,4 +1,4 @@
-﻿using CineApp.Back.DTOs.Clientes;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using System;
 using System.Collections.Generic;
@@ -19,5 +19,11 @@ namespace CineApp.Back.Repositories.Interfaces
         Task<bool> UpdateClienteAsync(Cliente cliente);
 
         Task<bool> DeleteClienteAsync(int id);
+
+        // métodos auxiliares para validaciones
+
+        Task<bool> ExistsDniAsync(long dni, int? idExcluir = null);
+
+        Task<bool> ExistsEmailAsync(string email, int? idExcluir = null);
     }
 }

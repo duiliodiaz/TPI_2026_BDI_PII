@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineApp.Back.DTOs.Productos
+namespace CineApp.Back.DTOs
 {
     public class ProductoDTO
     {
@@ -28,5 +28,22 @@ namespace CineApp.Back.DTOs.Productos
         public int IdTamañoProducto { get; set; }
 
         public bool Activo { get; set; } = true;
+    }
+
+    public class ProductoResponseDTO
+    {
+        public int IdProducto { get; set; }
+
+        public string Descripcion { get; set; } = null!;
+
+        public decimal PreUnitario { get; set; }
+
+        public int IdTipoProducto { get; set; }
+
+        public int IdTamañoProducto { get; set; }
+
+        public string TipoProductoNombre { get; set; }
+
+        public string TamañoProductoNombre { get; set; }
     }
 }

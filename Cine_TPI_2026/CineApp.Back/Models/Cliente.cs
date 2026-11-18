@@ -11,7 +11,7 @@ public partial class Cliente
 
     public string Apellido { get; set; } = null!;
 
-    public string Dni { get; set; } = null!;
+    public long Dni { get; set; }
 
     public string? EMail { get; set; }
 
