@@ -1,5 +1,5 @@
 ﻿using CineApp.Back.Data;
-using CineApp.Back.DTOs.Clientes;
+using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using CineApp.Back.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,23 +23,20 @@ namespace CineApp.Back.Repositories.Implementations
         public async Task<bool> AddClienteAsync(Cliente cliente)
         {
             await _context.Clientes.AddAsync(cliente);
+
             return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteClienteAsync(int id)
         {
-            // borrado lógico:
-
             var cliente = await GetClienteByIdAsync(id);
 
-            if (cliente != null)
-            {
-                cliente.Activo = false;
-                int filasAfectadas = await _context.SaveChangesAsync();
-                return filasAfectadas > 0;
-            }
+            if (cliente == null)
+                return false;
 
-            return false;
+            cliente.Activo = false;
+            
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<Cliente>> GetAllClientesAsync()
@@ -60,7 +57,29 @@ namespace CineApp.Back.Repositories.Implementations
         public async Task<bool> UpdateClienteAsync(Cliente cliente)
         {
             _context.Clientes.Update(cliente);
+
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        // métodos auxiliares para validaciones
+
+        public async Task<bool> ExistsDniAsync(long dni, int? idExcluir = null)
+        { // verifica si ya existe un cliente activo con ese dni
+            return await _context.Clientes.AnyAsync(c =>
+                c.Activo &&
+                c.Dni == dni &&
+                (!idExcluir.HasValue || c.IdCliente != idExcluir.Value)); // idExcluir solo sirve para update
+        }
+
+        public async Task<bool> ExistsEmailAsync(string email, int? idExcluir = null)
+        { // erifica si ya existe un cliente activo con ese email
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            return await _context.Clientes.AnyAsync(c =>
+                c.Activo &&
+                c.EMail.ToLower() == email.Trim().ToLower() &&
+                (!idExcluir.HasValue || c.IdCliente != idExcluir.Value));
         }
     }
 }

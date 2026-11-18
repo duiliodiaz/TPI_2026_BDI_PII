@@ -1,5 +1,4 @@
-﻿using CineApp.Back.DTOs.Clientes;
-using CineApp.Back.DTOs.Productos;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using System;
 using System.Collections.Generic;
@@ -20,5 +19,13 @@ namespace CineApp.Back.Repositories.Interfaces
         Task<bool> UpdateProductoAsync(Producto producto);
 
         Task<bool> DeleteProductoAsync(int id);
+
+        // métodos auxiliares para validaciones
+
+        Task<bool> ExistsDescripcionAsync(string descripcion, int? idExcluir = null);
+        
+        Task<bool> ExistsTipoProductoAsync(int idTipo);
+
+        Task<bool> ExistsTamañoProductoAsync(int idTamaño);
     }
 }

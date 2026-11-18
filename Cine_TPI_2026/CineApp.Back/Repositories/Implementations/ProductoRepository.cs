@@ -1,5 +1,5 @@
 ﻿using CineApp.Back.Data;
-using CineApp.Back.DTOs.Productos;
+using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using CineApp.Back.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +23,7 @@ namespace CineApp.Back.Repositories.Implementations
         public async Task<bool> AddProductoAsync(Producto producto)
         {
             await _context.Productos.AddAsync(producto);
+
             return await _context.SaveChangesAsync() > 0;
         }
 
@@ -30,13 +31,12 @@ namespace CineApp.Back.Repositories.Implementations
         {
             var producto = await GetProductoByIdAsync(id);
 
-            if (producto != null)
-            {
-                producto.Activo = false;
-                return await _context.SaveChangesAsync() > 0;
-            }
+            if (producto == null)
+                return false;
 
-            return false;
+            producto.Activo = false;
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public Task<List<Producto>> GetAllProductosAsync()
@@ -61,7 +61,30 @@ namespace CineApp.Back.Repositories.Implementations
         public async Task<bool> UpdateProductoAsync(Producto producto)
         {
             _context.Productos.Update(producto);
+
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        // Métodos auxiliaraes para validación en service
+
+        public async Task<bool> ExistsDescripcionAsync(string descripcion, int? idExcluir = null)
+        { // verifica si exsite la descripcion, siempre buscando un producto activo,
+            return await _context.Productos.AnyAsync(p =>
+                p.Activo &&
+                p.Descripcion.ToLower() == descripcion.Trim().ToLower() &&
+                (!idExcluir.HasValue || p.IdProducto != idExcluir.Value)); //idExcluir solo sirve para update
+        }
+        
+        public async Task<bool> ExistsTipoProductoAsync(int idTipo)
+        { // verifica que exista la clave foránea de tipo producto que recibe del dto
+            return await _context.TiposProductos
+                .AnyAsync(t => t.IdTipoProducto == idTipo);
+        }
+
+        public async Task<bool> ExistsTamañoProductoAsync(int idTamaño)
+        { // clave foránea
+            return await _context.TamañosProductos
+                .AnyAsync(t => t.IdTamañoProducto == idTamaño);
         }
     }
 }

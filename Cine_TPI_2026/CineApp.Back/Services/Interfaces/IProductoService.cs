@@ -1,5 +1,4 @@
-﻿using CineApp.Back.DTOs.Clientes;
-using CineApp.Back.DTOs.Productos;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +14,9 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ProductoResponseDTO?> ObtenerProductoPorIdAsync(int id);
 
-        Task<bool> AñadirProductoAsync(ProductoDTO dto);
+        Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoDTO dto);
 
-        Task<bool> ActualizarProductoAsync(int id, ProductoDTO dto);
+        Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoDTO dto);
 
         Task<bool> EliminarProductoAsync(int id);
     }

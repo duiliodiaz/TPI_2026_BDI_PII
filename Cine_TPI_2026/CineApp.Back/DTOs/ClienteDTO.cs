@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineApp.Back.DTOs.Clientes
+namespace CineApp.Back.DTOs
 {
     public class ClienteDTO
     {
@@ -23,7 +23,7 @@ namespace CineApp.Back.DTOs.Clientes
 
         [Required(ErrorMessage = "El DNI es obligatorio.")]
         [Range(1000000, 99999999, ErrorMessage = "El DNI debe ser un número válido de 7 u 8 dígitos.")]
-        public string Dni { get; set; } = null!;
+        public long Dni { get; set; }
 
         [EmailAddress(ErrorMessage = "El formato del correo electrónico no es válido.")]
         [StringLength(100, ErrorMessage = "El email no puede superar los 100 caracteres.")]

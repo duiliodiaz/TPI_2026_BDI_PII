@@ -1,5 +1,4 @@
-﻿using CineApp.Back.DTOs.Clientes;
-using CineApp.Back.DTOs.Productos;
+﻿using CineApp.Back.DTOs;
 using CineApp.Back.Services.Implementations;
 using CineApp.Back.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -32,40 +31,43 @@ namespace CineApp.WebAPI.Controllers
         public async Task<IActionResult> GetProductoById(int id)
         {
             var producto = await _productoService.ObtenerProductoPorIdAsync(id);
-
+            
             return Ok(producto);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProducto([FromBody] ProductoDTO dto)
         {
-            bool creado = await _productoService.AñadirProductoAsync(dto);
+            var creado = await _productoService.AñadirProductoAsync(dto);
 
-            if (!creado)
-            {
-                return BadRequest("No se pudo crear el producto. Verifique los datos ingresados.");
-            }
 
-            return Ok(new { mensaje = "Producto creado exitosamente" });
+            if (!creado.Exito)
+                return BadRequest(new { mensaje = creado.Mensaje });
+
+            return Ok(new { mensaje = creado.Mensaje });
+            //return StatusCode(201, new { mensaje = resultado.Mensaje });
             //return Created();
+            //return Ok(new { mensaje = "Producto creado exitosamente" });
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProducto(int id, [FromBody] ProductoDTO dto)
         {
+            if (id <= 0)
+                return BadRequest(new { mensaje = "El ID debe ser mayor a cero." });
+            
+
             if (dto.IdProducto != 0 && id != dto.IdProducto)
-            {
-                return BadRequest("El ID de la URL no coincide con el del cuerpo de la petición.");
-            }
+                return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID del producto enviado." });
+            
 
-            bool actualizado = await _productoService.ActualizarProductoAsync(id, dto);
+            var actualizado = await _productoService.ActualizarProductoAsync(id, dto);
 
-            if (!actualizado)
-            {
-                return NotFound("No se encontró el producto activo o los datos son inválidos.");
-            }
+            if (!actualizado.Exito)
+                return BadRequest(new { mensaje = actualizado.Mensaje });
+            
 
-            return Ok(new { mensaje = "Producto actualizado exitosamente" });
+            return Ok(new { mensaje = actualizado.Mensaje });
         }
 
         [HttpDelete("{id}")]
@@ -74,9 +76,7 @@ namespace CineApp.WebAPI.Controllers
             bool eliminado = await _productoService.EliminarProductoAsync(id);
 
             if (!eliminado)
-            {
                 return NotFound("No se encontró el producto activo.");
-            }
 
             return NoContent();
         }
