@@ -31,4 +31,18 @@ namespace CineApp.Back.DTOs
 
         public bool Activo { get; set; } = true;
     }
+
+
+    public class ClienteRequestDTO
+    {
+
+        public string Nombre { get; set; } = null!;
+        public string Apellido { get; set; } = null!;
+
+        public long Dni { get; set; }
+
+        public string? EMail { get; set; }
+
+        public bool Activo { get; set; } = true;
+    }
 }

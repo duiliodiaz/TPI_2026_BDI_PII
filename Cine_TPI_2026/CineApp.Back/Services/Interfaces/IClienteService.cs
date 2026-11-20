@@ -14,9 +14,9 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ClienteDTO?> ObtenerClientePorIdAsync(int id);
 
-        Task<(bool Exito, string Mensaje)> AñadirClienteAsync(ClienteDTO dto);
+        Task<(bool Exito, string Mensaje)> AñadirClienteAsync(ClienteRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje)> ActualizarClienteAsync(int id, ClienteDTO dto);
+        Task<(bool Exito, string Mensaje)> ActualizarClienteAsync(int id, ClienteRequestDTO dto);
 
         Task<bool> EliminarClienteAsync(int id);
     }

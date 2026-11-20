@@ -54,7 +54,7 @@ namespace CineApp.Back.Services.Implementations
             if (fechaComprobante > DateTime.Now)
                 return (false, "La fecha del comprobante no puede ser futura.");
 
-            var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
+            var cliente = await _clienteRepository.GetClienteByIdAsync(id);
             // validar cliente existente y activo
             if (cliente == null || !cliente.Activo)
                 return (false, "El cliente seleccionado no existe o está dado de baja.");

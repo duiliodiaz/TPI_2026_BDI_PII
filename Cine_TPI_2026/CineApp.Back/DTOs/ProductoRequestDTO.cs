@@ -9,7 +9,6 @@ namespace CineApp.Back.DTOs
 {
     public class ProductoRequestDTO
     {
-        public int IdProducto { get; set; }
 
         [Required(ErrorMessage = "La descripción del producto es obligatoria.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "La descripción debe tener entre 3 y 100 caracteres.")]

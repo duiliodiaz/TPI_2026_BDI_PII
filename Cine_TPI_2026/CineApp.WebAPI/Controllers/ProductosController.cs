@@ -57,10 +57,6 @@ namespace CineApp.WebAPI.Controllers
                 return BadRequest(new { mensaje = "El ID debe ser mayor a cero." });
             
 
-            if (dto.IdProducto != 0 && id != dto.IdProducto)
-                return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID del producto enviado." });
-            
-
             var actualizado = await _productoService.ActualizarProductoAsync(id, dto);
 
             if (!actualizado.Exito)

@@ -20,7 +20,7 @@ namespace CineApp.Back.Services.Implementations
             this._repository = repository;
         }
 
-        public async Task<(bool Exito, string Mensaje)> ActualizarClienteAsync(int id, ClienteDTO dto)
+        public async Task<(bool Exito, string Mensaje)> ActualizarClienteAsync(int id, ClienteRequestDTO dto)
         {
             if (dto == null)
                 return (false, "Los datos del cliente son nulos.");
@@ -50,7 +50,7 @@ namespace CineApp.Back.Services.Implementations
                 return (false, $"Ocurrió un error al intentar actualizar el cliente '{clienteExistente.Nombre}, {clienteExistente.Apellido}'.");
         }
 
-        public async Task<(bool Exito, string Mensaje)> AñadirClienteAsync(ClienteDTO dto)
+        public async Task<(bool Exito, string Mensaje)> AñadirClienteAsync(ClienteRequestDTO dto)
         {
             if (dto == null)
                 return (false, "Los datos del cliente son nulos.");

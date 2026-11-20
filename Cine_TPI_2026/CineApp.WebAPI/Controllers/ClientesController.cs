@@ -38,7 +38,7 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCliente([FromBody] ClienteDTO dto)
+        public async Task<IActionResult> CreateCliente([FromBody] ClienteRequestDTO dto)
         {
             var creado = await _service.AñadirClienteAsync(dto);
 
@@ -52,14 +52,11 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCliente(int id, [FromBody] ClienteDTO dto)
+        public async Task<IActionResult> UpdateCliente(int id, [FromBody] ClienteRequestDTO dto)
         {
             if (id <= 0)
                 return BadRequest(new { mensaje = "El ID debe ser mayor a cero." });
-
-            if (dto.IdCliente != 0 && id != dto.IdCliente)
-                return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID del cliente enviado." });
-
+           
             var actualizado = await _service.ActualizarClienteAsync(id, dto);
 
             if (!actualizado.Exito)
