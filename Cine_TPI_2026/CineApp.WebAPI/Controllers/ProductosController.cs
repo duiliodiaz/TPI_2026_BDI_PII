@@ -36,7 +36,7 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProducto([FromBody] ProductoDTO dto)
+        public async Task<IActionResult> CreateProducto([FromBody] ProductoRequestDTO dto)
         {
             var creado = await _productoService.AñadirProductoAsync(dto);
 
@@ -51,7 +51,7 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProducto(int id, [FromBody] ProductoDTO dto)
+        public async Task<IActionResult> UpdateProducto(int id, [FromBody] ProductoRequestDTO dto)
         {
             if (id <= 0)
                 return BadRequest(new { mensaje = "El ID debe ser mayor a cero." });

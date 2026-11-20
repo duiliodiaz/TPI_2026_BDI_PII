@@ -14,9 +14,9 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ProductoResponseDTO?> ObtenerProductoPorIdAsync(int id);
 
-        Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoDTO dto);
+        Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoDTO dto);
+        Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoRequestDTO dto);
 
         Task<bool> EliminarProductoAsync(int id);
     }

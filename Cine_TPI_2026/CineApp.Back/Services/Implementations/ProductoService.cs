@@ -20,7 +20,7 @@ namespace CineApp.Back.Services.Implementations
             this._repository = repository;
         }
 
-        public async Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoDTO dto)
+        public async Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoRequestDTO dto)
         {
             if (dto == null)
                 return (false, "Los datos del producto son nulos.");
@@ -53,7 +53,7 @@ namespace CineApp.Back.Services.Implementations
                 return (false, $"Ocurrió un error al intentar actualizar el producto ID: '{productoExistente.IdProducto}' - Nombre: '{productoExistente.Descripcion}'.");
         }
 
-        public async Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoDTO dto)
+        public async Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoRequestDTO dto)
         {
             if (dto == null)
                 return (false, "Los datos del producto son nulos.");

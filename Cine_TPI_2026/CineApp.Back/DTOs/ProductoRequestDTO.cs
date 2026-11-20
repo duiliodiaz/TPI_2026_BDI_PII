@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CineApp.Back.DTOs
 {
-    public class ProductoDTO
+    public class ProductoRequestDTO
     {
         public int IdProducto { get; set; }
 
