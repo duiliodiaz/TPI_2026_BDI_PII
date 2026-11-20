@@ -1,11 +1,13 @@
 using CineApp.Back.DTOs;
-using CineApp.Back.Services.Interface;
+using CineApp.Back.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineApp.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/dashboard")]
+[Authorize(Roles = "Administrador")]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _service;
@@ -13,6 +15,21 @@ public class DashboardController : ControllerBase
     public DashboardController(IDashboardService service)
     {
         _service = service;
+    }
+
+    // GET: api/dashboard/resumen
+    [HttpGet("resumen")]
+    public async Task<ActionResult<ResumenDashboardDto>> GetResumen()
+    {
+        return Ok(await _service.ObtenerResumen());
+    }
+
+    // GET: api/dashboard/ingresos-semana?fecha=2024-05-15
+    // Sin fecha, devuelve la semana actual.
+    [HttpGet("ingresos-semana")]
+    public async Task<ActionResult<IngresosSemanaDto>> GetIngresosSemana([FromQuery] DateTime? fecha)
+    {
+        return Ok(await _service.ObtenerIngresosSemana(fecha ?? DateTime.Today));
     }
 
     // GET: api/dashboard/fechas-mas-entradas?top=5

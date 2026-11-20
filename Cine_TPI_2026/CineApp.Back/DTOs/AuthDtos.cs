@@ -16,4 +16,9 @@ public class LoginResponseDto
     public string? Email { get; set; }
 
     public string Rol { get; set; } = null!;
+
+    public string Token { get; set; } = null!;
+
+    // Fecha y hora (UTC) en que vence el token.
+    public DateTime Expira { get; set; }
 }
