@@ -19,9 +19,9 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllClientes()
+        public async Task<IActionResult> GetAllClientes(bool? activo, long? dni)
         {
-            var lstClientes = await _service.ObtenerTodosClientesAsync();
+            var lstClientes = await _service.ObtenerTodosClientesAsync(activo, dni);
 
             return Ok(lstClientes);
         }
@@ -45,10 +45,10 @@ namespace CineApp.WebAPI.Controllers
             if (!creado.Exito)
                 return BadRequest(new { mensaje = creado.Mensaje });
 
-            return Ok(new { mensaje = creado.Mensaje });
-            //return StatusCode(201, new { mensaje = resultado.Mensaje });
-            //return Created();
-            //return Ok(new { mensaje = "Cliente creado exitosamente" });
+            return StatusCode(201, new
+            {
+                creado.Mensaje, creado.CreatedClient
+            });
         }
 
         [HttpPut("{id}")]
@@ -65,7 +65,10 @@ namespace CineApp.WebAPI.Controllers
             if (!actualizado.Exito)
                 return BadRequest(new { mensaje = actualizado.Mensaje });
 
-            return Ok(new { mensaje = actualizado.Mensaje });
+            return Ok(new 
+            {
+                actualizado.Mensaje, actualizado.NewClient
+            });
         }
 
         [HttpDelete("{id}")]

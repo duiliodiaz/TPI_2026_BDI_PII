@@ -10,7 +10,7 @@ namespace CineApp.Back.Repositories.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<List<Cliente>> GetAllClientesAsync();
+        Task<List<Cliente>> GetAllClientesAsync(bool? activo, long? dni);
 
         Task<Cliente?> GetClienteByIdAsync(int id);
 
