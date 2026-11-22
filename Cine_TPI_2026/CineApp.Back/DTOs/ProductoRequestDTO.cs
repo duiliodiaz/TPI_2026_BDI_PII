@@ -45,5 +45,7 @@ namespace CineApp.Back.DTOs
         public string TipoProductoNombre { get; set; }
 
         public string TamañoProductoNombre { get; set; }
+
+        public bool Activo { get; set; } = true;
     }
 }

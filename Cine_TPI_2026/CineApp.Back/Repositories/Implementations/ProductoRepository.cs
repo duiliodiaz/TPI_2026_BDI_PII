@@ -3,9 +3,11 @@ using CineApp.Back.DTOs;
 using CineApp.Back.Models;
 using CineApp.Back.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,19 +41,36 @@ namespace CineApp.Back.Repositories.Implementations
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<List<Producto>> GetAllProductosAsync()
+        public async Task<List<Producto>> GetAllProductosAsync(bool? activo, int? tipo, string? nombre)
         {
-            return _context.Productos
-                .Where(p => p.Activo)
+            var query = _context.Productos
                 .Include(p => p.IdTipoProductoNavigation)
                 .Include(p => p.IdTamañoProductoNavigation)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (activo.HasValue)
+            {
+                if (activo.Value)
+                    query = query.Where(p => p.Activo);
+                else
+                    query = query.Where(p => !p.Activo);
+            }
+
+            if (!activo.HasValue || activo.Value) // solo para "todos" o "activos"
+            {
+                if (tipo.HasValue) // si tipo true o false
+                    query = query.Where(p => p.IdTipoProducto == tipo.Value);
+
+                if (!string.IsNullOrWhiteSpace(nombre)) // si nombre no es null
+                    query = query.Where(p => p.Descripcion.Contains(nombre.Trim())); // contains = like (sql)
+            }
+
+            return await query.ToListAsync();
         }
 
         public Task<Producto?> GetProductoByIdAsync(int id)
         {
             return _context.Productos
-                .Where(p => p.Activo)
                 .Include(p => p.IdTipoProductoNavigation)
                 .Include(p => p.IdTamañoProductoNavigation)
                 .Where(p => p.IdProducto == id)

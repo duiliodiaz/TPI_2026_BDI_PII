@@ -41,37 +41,29 @@ namespace CineApp.Back.Repositories.Implementations
 
         public async Task<List<Cliente>> GetAllClientesAsync(bool? activo, long? dni)
         {
-            if (!activo.HasValue)
+            var query = _context.Clientes
+                .AsQueryable();
+
+            if (activo.HasValue)
+            {
+                if (activo.Value)
+                    query = query.Where(c => c.Activo);
+                else
+                    query = query.Where(c => !c.Activo);
+            }
+
+            if (!activo.HasValue || activo.Value) // para todos o activos
             {
                 if (dni.HasValue)
-                    return await _context.Clientes
-                        .Where(c => c.Dni == dni.Value)
-                        .ToListAsync();
-
-                return await _context.Clientes
-                    .ToListAsync();
+                    query = query.Where(p => p.Dni == dni.Value);
             }
-            else if (activo.Value)
-            {
-                if (dni.HasValue)
-                    return await _context.Clientes
-                        .Where(c => c.Dni == dni.Value)
-                        .ToListAsync();
 
-                return await _context.Clientes
-                    .Where(c => c.Activo)
-                    .ToListAsync();
-            }
-            else
-                return await _context.Clientes
-                    .Where(c => !c.Activo)
-                    .ToListAsync();
+            return await query.ToListAsync();
         }
 
         public async Task<Cliente?> GetClienteByIdAsync(int id)
         {
             return await _context.Clientes
-                .Where(c => c.Activo)
                 .Where(c => c.IdCliente == id)
                 .FirstOrDefaultAsync();
         }

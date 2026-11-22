@@ -18,6 +18,6 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<(bool Exito, string Mensaje, ClienteDTO? NewClient)> ActualizarClienteAsync(int id, ClienteDTO dto);
 
-        Task<bool> EliminarClienteAsync(int id);
+        Task<(bool Exito, string Mensaje, ClienteDTO? DeletedClient)> EliminarClienteAsync(int id);
     }
 }

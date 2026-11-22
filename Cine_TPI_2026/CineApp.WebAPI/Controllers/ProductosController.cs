@@ -20,9 +20,9 @@ namespace CineApp.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProductos()
+        public async Task<IActionResult> GetAllProductos(bool? activo, int? tipo, string? nombre)
         {
-            var lstProductos = await _productoService.ObtenerTodosProductosAsync();
+            var lstProductos = await _productoService.ObtenerTodosProductosAsync(activo, tipo, nombre);
 
             return Ok(lstProductos);
         }
@@ -44,10 +44,10 @@ namespace CineApp.WebAPI.Controllers
             if (!creado.Exito)
                 return BadRequest(new { mensaje = creado.Mensaje });
 
-            return Ok(new { mensaje = creado.Mensaje });
-            //return StatusCode(201, new { mensaje = resultado.Mensaje });
-            //return Created();
-            //return Ok(new { mensaje = "Producto creado exitosamente" });
+            return StatusCode(201, new
+            {
+                creado.Mensaje, creado.CreatedProduct
+            });
         }
 
         [HttpPut("{id}")]
@@ -67,18 +67,27 @@ namespace CineApp.WebAPI.Controllers
                 return BadRequest(new { mensaje = actualizado.Mensaje });
             
 
-            return Ok(new { mensaje = actualizado.Mensaje });
+            return Ok(new
+            {
+                actualizado.Mensaje, actualizado.NewProduct
+            });
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProducto(int id)
         {
-            bool eliminado = await _productoService.EliminarProductoAsync(id);
+            var eliminado = await _productoService.EliminarProductoAsync(id);
 
-            if (!eliminado)
-                return NotFound("No se encontró el producto activo.");
+            if (!eliminado.Exito)
+                return NotFound(new
+                {
+                    eliminado.Mensaje
+                });
 
-            return NoContent();
+            return Ok(new
+            {
+                eliminado.Mensaje, eliminado.DeletedProduct
+            });
         }
 
         [HttpGet("tipos")]

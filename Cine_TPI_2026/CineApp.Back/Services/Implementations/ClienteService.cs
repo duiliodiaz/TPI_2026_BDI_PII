@@ -80,9 +80,19 @@ namespace CineApp.Back.Services.Implementations
             return (true, "Cliente creado exitosamente.", createdClientDto);
         }
 
-        public Task<bool> EliminarClienteAsync(int id)
+        public async Task<(bool Exito, string Mensaje, ClienteDTO? DeletedClient)> EliminarClienteAsync(int id)
         {
-            return _repository.DeleteClienteAsync(id);
+            var deletedClient = await ObtenerClientePorIdAsync(id);
+
+            if (deletedClient == null)
+                return (false, $"El cliente no existe en la base de datos.", null);
+
+            bool deleted = await _repository.DeleteClienteAsync(id);
+
+            if (!deleted)
+                return (false, $"Ocurrió un error al intentar eliminar el cliente '{deletedClient.Nombre}, {deletedClient.Apellido}'.", null);
+
+            return (true, "Cliente eliminado exitosamente.", deletedClient);
         }
 
         public async Task<List<ClienteDTO>> ObtenerTodosClientesAsync(bool? activo, long? dni)

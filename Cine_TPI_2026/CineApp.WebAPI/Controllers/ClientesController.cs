@@ -74,12 +74,18 @@ namespace CineApp.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            bool eliminado = await _service.EliminarClienteAsync(id);
+            var eliminado = await _service.EliminarClienteAsync(id);
 
-            if (!eliminado)
-                return NotFound();
+            if (!eliminado.Exito)
+                return NotFound(new
+                {
+                    eliminado.Mensaje
+                });
 
-            return NoContent();
+            return Ok(new
+            {
+                eliminado.Mensaje, eliminado.DeletedClient
+            });
         }
     }
 }
