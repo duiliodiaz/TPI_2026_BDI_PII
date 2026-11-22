@@ -43,7 +43,7 @@ namespace CineApp.WebAPI.Controllers
             var creado = await _service.AñadirClienteAsync(dto);
 
             if (!creado.Exito)
-                return BadRequest(new { mensaje = creado.Mensaje });
+                return this.RespuestaError(creado.Error, creado.Mensaje);
 
             return StatusCode(201, new
             {
@@ -60,7 +60,7 @@ namespace CineApp.WebAPI.Controllers
             var actualizado = await _service.ActualizarClienteAsync(id, dto);
 
             if (!actualizado.Exito)
-                return BadRequest(new { mensaje = actualizado.Mensaje });
+                return this.RespuestaError(actualizado.Error, actualizado.Mensaje);
 
             return Ok(new 
             {
@@ -74,10 +74,7 @@ namespace CineApp.WebAPI.Controllers
             var eliminado = await _service.EliminarClienteAsync(id);
 
             if (!eliminado.Exito)
-                return NotFound(new
-                {
-                    eliminado.Mensaje
-                });
+                return this.RespuestaError(eliminado.Error, eliminado.Mensaje);
 
             return Ok(new
             {

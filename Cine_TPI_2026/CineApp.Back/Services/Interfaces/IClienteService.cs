@@ -14,10 +14,10 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ClienteDTO?> ObtenerClientePorIdAsync(int id);
 
-        Task<(bool Exito, string Mensaje, ClienteDTO? CreatedClient)> AñadirClienteAsync(ClienteRequestDTO dto);
+        Task<(bool Exito, string Mensaje, ClienteDTO? CreatedClient, TipoError Error)> AñadirClienteAsync(ClienteRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje, ClienteDTO? NewClient)> ActualizarClienteAsync(int id, ClienteRequestDTO dto);
+        Task<(bool Exito, string Mensaje, ClienteDTO? NewClient, TipoError Error)> ActualizarClienteAsync(int id, ClienteRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje, ClienteDTO? DeletedClient)> EliminarClienteAsync(int id);
+        Task<(bool Exito, string Mensaje, ClienteDTO? DeletedClient, TipoError Error)> EliminarClienteAsync(int id);
     }
 }

@@ -15,9 +15,9 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ComprobanteResponseDTO?> ObtenerComprobantePorIdAsync(int id);
 
-        Task<(bool Exito, string Mensaje)> AñadirComprobanteAsync(ComprobanteRequestDTO dto);
+        Task<(bool Exito, string Mensaje, TipoError Error)> AñadirComprobanteAsync(ComprobanteRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto);
+        Task<(bool Exito, string Mensaje, TipoError Error)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto);
 
         Task<bool> EliminarComprobanteAsync(int id);
 

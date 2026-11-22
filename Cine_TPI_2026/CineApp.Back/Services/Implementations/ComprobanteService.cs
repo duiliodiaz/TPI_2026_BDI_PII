@@ -35,16 +35,16 @@ namespace CineApp.Back.Services.Implementations
             return await _comprobanteRepository.GetIdNewComprobanteAsync();
         }
 
-        public async Task<(bool Exito, string Mensaje)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, TipoError Error)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto)
         {
             var comprobanteExistente = await _comprobanteRepository.GetComprobanteByIdAsync(id);
 
             if (comprobanteExistente == null || !comprobanteExistente.Activo)
-                return (false, "El comprobante no existe o ya fue anulado, no se puede modificar.");
+                return (false, "El comprobante no existe o ya fue anulado, no se puede modificar.", TipoError.NoEncontrado);
 
             // validar que tenga al menos un detalle
             if (dto.Detalles == null || dto.Detalles.Count == 0)
-                return (false, "El comprobante debe contener al menos un producto.");
+                return (false, "El comprobante debe contener al menos un producto.", TipoError.Validacion);
 
             // validar que el detalle no tenga productos duplicados (ej 2 veces coca)
             var productosDuplicados = dto.Detalles
@@ -52,34 +52,34 @@ namespace CineApp.Back.Services.Implementations
                 .Any(g => g.Count() > 1);
 
             if (productosDuplicados)
-                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.");
+                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.", TipoError.Validacion);
 
             var fechaComprobante = dto.Fecha;
             // no permite fechas posteriores a ahora
             if (fechaComprobante > DateTime.Now)
-                return (false, "La fecha del comprobante no puede ser futura.");
+                return (false, "La fecha del comprobante no puede ser futura.", TipoError.Validacion);
 
             var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
             // validar cliente existente y activo
             if (cliente == null || !cliente.Activo)
-                return (false, "El cliente seleccionado no existe o está dado de baja.");
+                return (false, "El cliente seleccionado no existe o está dado de baja.", TipoError.Validacion);
 
             var formaPagoExiste = await _formaPagoRepository.ExistsAsync(dto.IdFormaPago);
 
             if (!formaPagoExiste)
-                return (false, "La forma de pago seleccionada no es válida.");
+                return (false, "La forma de pago seleccionada no es válida.", TipoError.Validacion);
 
             var nuevosDetalles = new List<DetallesComprobanteProducto>();
 
             foreach (var detalle in dto.Detalles)
             {
                 if (detalle.CantidadProductos <= 0)
-                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.");
+                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.", TipoError.Validacion);
 
                 var producto = await _productoRepository.GetProductoByIdAsync(detalle.IdProducto);
 
                 if (producto == null || !producto.Activo)
-                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.");
+                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.", TipoError.Validacion);
 
                 nuevosDetalles.Add(new DetallesComprobanteProducto
                 {
@@ -97,49 +97,49 @@ namespace CineApp.Back.Services.Implementations
             var actualizado = await _comprobanteRepository.UpdateComprobanteAsync(comprobanteExistente, nuevosDetalles);
 
             if (actualizado)
-                return (true, "Comprobante registrado correctamente.");
+                return (true, "Comprobante registrado correctamente.", TipoError.Ninguno);
             else
-                return (false, "Ocurrió un error al intentar actualizar el comprobante.");
+                return (false, "Ocurrió un error al intentar actualizar el comprobante.", TipoError.Interno);
         }
 
-        public async Task<(bool Exito, string Mensaje)> AñadirComprobanteAsync(ComprobanteRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, TipoError Error)> AñadirComprobanteAsync(ComprobanteRequestDTO dto)
         {
             if (dto.Detalles == null || dto.Detalles.Count == 0)
-                return (false, "El comprobante debe contener al menos un producto.");
+                return (false, "El comprobante debe contener al menos un producto.", TipoError.Validacion);
 
             var productosDuplicados = dto.Detalles
                 .GroupBy(d => d.IdProducto)
                 .Any(g => g.Count() > 1);
 
             if (productosDuplicados)
-                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.");
+                return (false, "No se puede repetir el mismo producto en múltiples renglones del detalle. Sume las cantidades.", TipoError.Validacion);
 
             var fechaComprobante = dto.Fecha;
 
             if (fechaComprobante > DateTime.Now)
-                return (false, "La fecha del comprobante no puede ser futura.");
+                return (false, "La fecha del comprobante no puede ser futura.", TipoError.Validacion);
 
             var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
 
             if (cliente == null || !cliente.Activo)
-                return (false, "El cliente seleccionado no existe o está dado de baja.");
+                return (false, "El cliente seleccionado no existe o está dado de baja.", TipoError.Validacion);
 
             var formaPagoExiste = await _formaPagoRepository.ExistsAsync(dto.IdFormaPago);
 
             if (!formaPagoExiste)
-                return (false, "La forma de pago seleccionada no es válida.");
+                return (false, "La forma de pago seleccionada no es válida.", TipoError.Validacion);
 
             var detallesComprobante = new List<DetallesComprobanteProducto>();
 
             foreach (var detalle in dto.Detalles)
             {
                 if (detalle.CantidadProductos <= 0)
-                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.");
+                    return (false, $"La cantidad para el producto ID {detalle.IdProducto} debe ser mayor a cero.", TipoError.Validacion);
 
                 var producto = await _productoRepository.GetProductoByIdAsync(detalle.IdProducto);
 
                 if (producto == null || !producto.Activo)
-                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.");
+                    return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.", TipoError.Validacion);
 
                 detallesComprobante.Add(new DetallesComprobanteProducto
                 {
@@ -161,9 +161,9 @@ namespace CineApp.Back.Services.Implementations
             var creado = await _comprobanteRepository.AddComprobanteAsync(nuevoComprobante);
 
             if (creado)
-                return (true, "Comprobante registrado correctamente.");
+                return (true, "Comprobante registrado correctamente.", TipoError.Ninguno);
             else
-                return (false, "Ocurrió un error al intentar crear el comprobante.");
+                return (false, "Ocurrió un error al intentar crear el comprobante.", TipoError.Interno);
         }
 
         public async Task<bool> EliminarComprobanteAsync(int id)

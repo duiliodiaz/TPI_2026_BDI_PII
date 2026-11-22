@@ -31,7 +31,10 @@ namespace CineApp.WebAPI.Controllers
         public async Task<IActionResult> GetProductoById(int id)
         {
             var producto = await _productoService.ObtenerProductoPorIdAsync(id);
-            
+
+            if (producto == null)
+                return NotFound(new { mensaje = $"No se encontró un producto con ID '{id}'." });
+
             return Ok(producto);
         }
 
@@ -42,7 +45,7 @@ namespace CineApp.WebAPI.Controllers
 
 
             if (!creado.Exito)
-                return BadRequest(new { mensaje = creado.Mensaje });
+                return this.RespuestaError(creado.Error, creado.Mensaje);
 
             return StatusCode(201, new
             {
@@ -60,7 +63,7 @@ namespace CineApp.WebAPI.Controllers
             var actualizado = await _productoService.ActualizarProductoAsync(id, dto);
 
             if (!actualizado.Exito)
-                return BadRequest(new { mensaje = actualizado.Mensaje });
+                return this.RespuestaError(actualizado.Error, actualizado.Mensaje);
             
 
             return Ok(new
@@ -75,10 +78,7 @@ namespace CineApp.WebAPI.Controllers
             var eliminado = await _productoService.EliminarProductoAsync(id);
 
             if (!eliminado.Exito)
-                return NotFound(new
-                {
-                    eliminado.Mensaje
-                });
+                return this.RespuestaError(eliminado.Error, eliminado.Mensaje);
 
             return Ok(new
             {

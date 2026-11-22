@@ -20,24 +20,24 @@ namespace CineApp.Back.Services.Implementations
             this._repository = repository;
         }
 
-        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? NewProduct)> ActualizarProductoAsync(int id, ProductoRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? NewProduct, TipoError Error)> ActualizarProductoAsync(int id, ProductoRequestDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del producto son nulos.", null);
+                return (false, "Los datos del producto son nulos.", null, TipoError.Validacion);
 
             var productoExistente = await _repository.GetProductoByIdAsync(id);
 
             if (productoExistente == null)
-                return (false, $"No se encontró un producto con ID '{id}'.", null);
+                return (false, $"No se encontró un producto con ID '{id}'.", null, TipoError.NoEncontrado);
 
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
-                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null);
+                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null, TipoError.Validacion);
 
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
-                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null);
+                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null, TipoError.Validacion);
 
             if (await _repository.ExistsDescripcionAsync(dto.Descripcion, id))
-                return (false, $"Ya existe otro producto activo llamado '{dto.Descripcion.Trim()}'.", null);
+                return (false, $"Ya existe otro producto activo llamado '{dto.Descripcion.Trim()}'.", null, TipoError.Conflicto);
 
             productoExistente.Descripcion = dto.Descripcion.Trim();
             productoExistente.PreUnitario = dto.PreUnitario;
@@ -48,28 +48,28 @@ namespace CineApp.Back.Services.Implementations
             bool updated = await _repository.UpdateProductoAsync(productoExistente);
 
             if (!updated)
-                return (false, $"Ocurrió un error al intentar actualizar el producto ID: '{productoExistente.IdProducto}' - Nombre: '{productoExistente.Descripcion}'.", null);
+                return (false, $"Ocurrió un error al intentar actualizar el producto ID: '{productoExistente.IdProducto}' - Nombre: '{productoExistente.Descripcion}'.", null, TipoError.Interno);
 
             var productoActualizado = await _repository.GetProductoByIdAsync(id);
 
             var dtoResponse = MapearProductoHaciaDTO(productoActualizado);
 
-            return (true, "Producto actualizado exitosamente.", dtoResponse);
+            return (true, "Producto actualizado exitosamente.", dtoResponse, TipoError.Ninguno);
         }
 
-        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? CreatedProduct)> AñadirProductoAsync(ProductoRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? CreatedProduct, TipoError Error)> AñadirProductoAsync(ProductoRequestDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del producto son nulos.", null);
+                return (false, "Los datos del producto son nulos.", null, TipoError.Validacion);
 
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
-                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null);
+                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null, TipoError.Validacion);
 
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
-                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null);
+                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null, TipoError.Validacion);
 
             if (await _repository.ExistsDescripcionAsync(dto.Descripcion))
-                return (false, $"Ya existe un producto activo llamado '{dto.Descripcion.Trim()}'.", null);
+                return (false, $"Ya existe un producto activo llamado '{dto.Descripcion.Trim()}'.", null, TipoError.Conflicto);
 
             var nuevoProducto = new Producto
             {
@@ -83,29 +83,29 @@ namespace CineApp.Back.Services.Implementations
             bool guardado = await _repository.AddProductoAsync(nuevoProducto);
 
             if (!guardado)
-                return (false, $"Ocurrió un error al intentar crear el producto '{nuevoProducto.Descripcion}'.", null);
+                return (false, $"Ocurrió un error al intentar crear el producto '{nuevoProducto.Descripcion}'.", null, TipoError.Interno);
 
             var productoConRelaciones = await _repository.GetProductoByIdAsync(nuevoProducto.IdProducto);
 
             var createdProductDto = MapearProductoHaciaDTO(productoConRelaciones);
 
-            return (true, "Producto creado exitosamente.", createdProductDto);
+            return (true, "Producto creado exitosamente.", createdProductDto, TipoError.Ninguno);
 
         }
 
-        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? DeletedProduct)> EliminarProductoAsync(int id)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? DeletedProduct, TipoError Error)> EliminarProductoAsync(int id)
         {
             var deletedProduct = await ObtenerProductoPorIdAsync(id);
 
             if (deletedProduct == null)
-                return (false, "El producto no existe en la base de datos.", null);
+                return (false, "El producto no existe en la base de datos.", null, TipoError.NoEncontrado);
 
             bool deleted = await _repository.DeleteProductoAsync(id);
 
             if (!deleted)
-                return (false, $"Ocurrió un error al intentar eliminar el producto '{deletedProduct.Descripcion}'.", null);
+                return (false, $"Ocurrió un error al intentar eliminar el producto '{deletedProduct.Descripcion}'.", null, TipoError.Interno);
 
-            return (true, "Producto eliminado exitosamente.", deletedProduct);
+            return (true, "Producto eliminado exitosamente.", deletedProduct, TipoError.Ninguno);
         }
 
         public async Task<ProductoResponseDTO?> ObtenerProductoPorIdAsync(int id)

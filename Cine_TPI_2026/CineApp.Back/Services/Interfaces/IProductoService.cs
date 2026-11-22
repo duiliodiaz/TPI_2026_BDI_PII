@@ -14,10 +14,10 @@ namespace CineApp.Back.Services.Interfaces
 
         Task<ProductoResponseDTO?> ObtenerProductoPorIdAsync(int id);
 
-        Task<(bool Exito, string Mensaje, ProductoResponseDTO? CreatedProduct)> AñadirProductoAsync(ProductoRequestDTO dto);
+        Task<(bool Exito, string Mensaje, ProductoResponseDTO? CreatedProduct, TipoError Error)> AñadirProductoAsync(ProductoRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje, ProductoResponseDTO? NewProduct)> ActualizarProductoAsync(int id, ProductoRequestDTO dto);
+        Task<(bool Exito, string Mensaje, ProductoResponseDTO? NewProduct, TipoError Error)> ActualizarProductoAsync(int id, ProductoRequestDTO dto);
 
-        Task<(bool Exito, string Mensaje, ProductoResponseDTO? DeletedProduct)> EliminarProductoAsync(int id);
+        Task<(bool Exito, string Mensaje, ProductoResponseDTO? DeletedProduct, TipoError Error)> EliminarProductoAsync(int id);
     }
 }
