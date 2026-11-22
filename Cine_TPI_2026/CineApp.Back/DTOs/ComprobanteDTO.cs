@@ -9,7 +9,6 @@ namespace CineApp.Back.DTOs
 {
     public class ComprobanteRequestDTO
     {
-        public int IdComprobante { get; set; }
 
         [Required(ErrorMessage = "El cliente es obligatorio.")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un cliente válido.")]

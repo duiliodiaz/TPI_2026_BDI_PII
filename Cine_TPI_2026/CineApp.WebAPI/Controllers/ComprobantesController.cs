@@ -55,9 +55,6 @@ namespace CineApp.WebAPI.Controllers
             if (id <= 0)
                 return BadRequest(new { mensaje = "El ID del comprobante debe ser mayor a cero." });
 
-            if (dto.IdComprobante != 0 && id != dto.IdComprobante)
-                return BadRequest(new { mensaje = "El ID de la URL no coincide con el ID del comprobante enviado." });
-
             var actualizado = await _service.ActualizarComprobanteAsync(id, dto);
 
             if (!actualizado.Exito)
