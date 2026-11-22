@@ -30,6 +30,11 @@ namespace CineApp.Back.Services.Implementations
             _clienteRepository = clienteRepository;
         }
 
+        public async Task<int> ObtenerIdNuevoComprobanteAsync()
+        {
+            return await _comprobanteRepository.GetIdNewComprobanteAsync();
+        }
+
         public async Task<(bool Exito, string Mensaje)> ActualizarComprobanteAsync(int id, ComprobanteRequestDTO dto)
         {
             var comprobanteExistente = await _comprobanteRepository.GetComprobanteByIdAsync(id);
@@ -214,6 +219,11 @@ namespace CineApp.Back.Services.Implementations
                     PrecioUnitario = d.PrecioUnitario
                 }).ToList()
             };
+        }
+
+        Task<int> IComprobanteService.ObtenerIdNuevoComprobanteAsync()
+        {
+            return ObtenerIdNuevoComprobanteAsync();
         }
     }
 }
