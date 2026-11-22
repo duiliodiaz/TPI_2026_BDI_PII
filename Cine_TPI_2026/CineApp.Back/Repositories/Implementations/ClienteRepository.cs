@@ -39,17 +39,31 @@ namespace CineApp.Back.Repositories.Implementations
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<Cliente>> GetAllClientesAsync()
+        public async Task<List<Cliente>> GetAllClientesAsync(bool? activo, long? dni)
         {
-            return await _context.Clientes
-                .Where(c => c.Activo)
-                .ToListAsync();
+            var query = _context.Clientes
+                .AsQueryable();
+
+            if (activo.HasValue)
+            {
+                if (activo.Value)
+                    query = query.Where(c => c.Activo);
+                else
+                    query = query.Where(c => !c.Activo);
+            }
+
+            if (!activo.HasValue || activo.Value) // para todos o activos
+            {
+                if (dni.HasValue)
+                    query = query.Where(p => p.Dni == dni.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Cliente?> GetClienteByIdAsync(int id)
         {
             return await _context.Clientes
-                .Where(c => c.Activo)
                 .Where(c => c.IdCliente == id)
                 .FirstOrDefaultAsync();
         }

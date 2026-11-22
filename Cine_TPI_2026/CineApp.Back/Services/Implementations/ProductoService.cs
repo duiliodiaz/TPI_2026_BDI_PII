@@ -20,24 +20,24 @@ namespace CineApp.Back.Services.Implementations
             this._repository = repository;
         }
 
-        public async Task<(bool Exito, string Mensaje)> ActualizarProductoAsync(int id, ProductoRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? NewProduct)> ActualizarProductoAsync(int id, ProductoRequestDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del producto son nulos.");
+                return (false, "Los datos del producto son nulos.", null);
 
             var productoExistente = await _repository.GetProductoByIdAsync(id);
 
             if (productoExistente == null)
-                return (false, $"No se encontró un producto activo con ID '{id}'.");
+                return (false, $"No se encontró un producto con ID '{id}'.", null);
 
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
-                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.");
+                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null);
 
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
-                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.");
+                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null);
 
             if (await _repository.ExistsDescripcionAsync(dto.Descripcion, id))
-                return (false, $"Ya existe otro producto activo llamado '{dto.Descripcion.Trim()}'.");
+                return (false, $"Ya existe otro producto activo llamado '{dto.Descripcion.Trim()}'.", null);
 
             productoExistente.Descripcion = dto.Descripcion.Trim();
             productoExistente.PreUnitario = dto.PreUnitario;
@@ -45,27 +45,31 @@ namespace CineApp.Back.Services.Implementations
             productoExistente.IdTamañoProducto = dto.IdTamañoProducto;
             productoExistente.Activo = dto.Activo;
 
-            bool actualizado = await _repository.UpdateProductoAsync(productoExistente);
+            bool updated = await _repository.UpdateProductoAsync(productoExistente);
 
-            if (actualizado)
-                return (true, "Producto actualizado exitosamente.");
-            else
-                return (false, $"Ocurrió un error al intentar actualizar el producto ID: '{productoExistente.IdProducto}' - Nombre: '{productoExistente.Descripcion}'.");
+            if (!updated)
+                return (false, $"Ocurrió un error al intentar actualizar el producto ID: '{productoExistente.IdProducto}' - Nombre: '{productoExistente.Descripcion}'.", null);
+
+            var productoActualizado = await _repository.GetProductoByIdAsync(id);
+
+            var dtoResponse = MapearProductoHaciaDTO(productoActualizado);
+
+            return (true, "Producto actualizado exitosamente.", dtoResponse);
         }
 
-        public async Task<(bool Exito, string Mensaje)> AñadirProductoAsync(ProductoRequestDTO dto)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? CreatedProduct)> AñadirProductoAsync(ProductoRequestDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del producto son nulos.");
+                return (false, "Los datos del producto son nulos.", null);
 
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
-                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.");
+                return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null);
 
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
-                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.");
+                return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null);
 
             if (await _repository.ExistsDescripcionAsync(dto.Descripcion))
-                return (false, $"Ya existe un producto activo llamado '{dto.Descripcion.Trim()}'.");
+                return (false, $"Ya existe un producto activo llamado '{dto.Descripcion.Trim()}'.", null);
 
             var nuevoProducto = new Producto
             {
@@ -78,15 +82,30 @@ namespace CineApp.Back.Services.Implementations
 
             bool guardado = await _repository.AddProductoAsync(nuevoProducto);
 
-            if (guardado)
-                return (true, "Producto creado exitosamente.");
-            else
-                return (false, $"Ocurrió un error al intentar crear el producto '{nuevoProducto.IdProducto}' - '{nuevoProducto.Descripcion}'.");
+            if (!guardado)
+                return (false, $"Ocurrió un error al intentar crear el producto '{nuevoProducto.Descripcion}'.", null);
+
+            var productoConRelaciones = await _repository.GetProductoByIdAsync(nuevoProducto.IdProducto);
+
+            var createdProductDto = MapearProductoHaciaDTO(productoConRelaciones);
+
+            return (true, "Producto creado exitosamente.", createdProductDto);
+
         }
 
-        public Task<bool> EliminarProductoAsync(int id)
+        public async Task<(bool Exito, string Mensaje, ProductoResponseDTO? DeletedProduct)> EliminarProductoAsync(int id)
         {
-            return _repository.DeleteProductoAsync(id);
+            var deletedProduct = await ObtenerProductoPorIdAsync(id);
+
+            if (deletedProduct == null)
+                return (false, "El producto no existe en la base de datos.", null);
+
+            bool deleted = await _repository.DeleteProductoAsync(id);
+
+            if (!deleted)
+                return (false, $"Ocurrió un error al intentar eliminar el producto '{deletedProduct.Descripcion}'.", null);
+
+            return (true, "Producto eliminado exitosamente.", deletedProduct);
         }
 
         public async Task<ProductoResponseDTO?> ObtenerProductoPorIdAsync(int id)
@@ -99,9 +118,9 @@ namespace CineApp.Back.Services.Implementations
             return MapearProductoHaciaDTO(producto);
         }
 
-        public async Task<List<ProductoResponseDTO>> ObtenerTodosProductosAsync()
+        public async Task<List<ProductoResponseDTO>> ObtenerTodosProductosAsync(bool? activo, int? tipo, string? nombre)
         {
-            var lstProductos = await _repository.GetAllProductosAsync();
+            var lstProductos = await _repository.GetAllProductosAsync(activo, tipo, nombre);
 
             return lstProductos.Select(p => MapearProductoHaciaDTO(p)).ToList();
         }
@@ -117,7 +136,9 @@ namespace CineApp.Back.Services.Implementations
                 IdTamañoProducto = producto.IdTamañoProducto,
 
                 TipoProductoNombre = producto.IdTipoProductoNavigation?.Descripcion ?? "Sin Tipo",
-                TamañoProductoNombre = producto.IdTamañoProductoNavigation?.Descripcion ?? "Sin Tamaño"
+                TamañoProductoNombre = producto.IdTamañoProductoNavigation?.Descripcion ?? "Sin Tamaño",
+
+                Activo = producto.Activo,
             };
         }
     }

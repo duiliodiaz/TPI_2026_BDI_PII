@@ -10,7 +10,7 @@ namespace CineApp.Back.Repositories.Interfaces
 {
     public interface IProductoRepository
     {
-        Task<List<Producto>> GetAllProductosAsync();
+        Task<List<Producto>> GetAllProductosAsync(bool? activo, int? tipo, string? nombre);
 
         Task<Producto?> GetProductoByIdAsync(int id);
 

@@ -20,21 +20,21 @@ namespace CineApp.Back.Services.Implementations
             this._repository = repository;
         }
 
-        public async Task<(bool Exito, string Mensaje)> ActualizarClienteAsync(int id, ClienteDTO dto)
+        public async Task<(bool Exito, string Mensaje, ClienteDTO? NewClient)> ActualizarClienteAsync(int id, ClienteDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del cliente son nulos.");
+                return (false, "Los datos del cliente son nulos.", null);
 
             var clienteExistente = await _repository.GetClienteByIdAsync(id);
 
             if (clienteExistente == null)
-                return (false, $"No se encontró un cliente activo con ID '{id}'.");
+                return (false, $"No se encontró un cliente activo con ID '{id}'.", null);
 
             if (await _repository.ExistsDniAsync(dto.Dni, id))
-                return (false, $"Ya existe otro cliente activo registrado con el DNI '{dto.Dni}'.");
+                return (false, $"Ya existe otro cliente activo registrado con el DNI '{dto.Dni}'.", null);
 
             if (await _repository.ExistsEmailAsync(dto.EMail, id))
-                return (false, $"El email '{dto.EMail.Trim()}' ya pertenece a otro cliente.");
+                return (false, $"El email '{dto.EMail.Trim()}' ya pertenece a otro cliente.", null);
 
             clienteExistente.Nombre = dto.Nombre.Trim();
             clienteExistente.Apellido = dto.Apellido.Trim();
@@ -42,24 +42,24 @@ namespace CineApp.Back.Services.Implementations
             clienteExistente.EMail = dto.EMail;
             clienteExistente.Activo = dto.Activo;
 
-            bool actualizado = await _repository.UpdateClienteAsync(clienteExistente);
+            bool updated = await _repository.UpdateClienteAsync(clienteExistente);
 
-            if (actualizado)
-                return (true, "Cliente actualizado exitosamente.");
-            else
-                return (false, $"Ocurrió un error al intentar actualizar el cliente '{clienteExistente.Nombre}, {clienteExistente.Apellido}'.");
+            if (!updated)
+                return (false, $"Ocurrió un error al intentar actualizar el cliente '{clienteExistente.Nombre}, {clienteExistente.Apellido}'.", null);
+
+            return (true, "Cliente actualizado exitosamente.", dto);
         }
 
-        public async Task<(bool Exito, string Mensaje)> AñadirClienteAsync(ClienteDTO dto)
+        public async Task<(bool Exito, string Mensaje, ClienteDTO? CreatedClient)> AñadirClienteAsync(ClienteDTO dto)
         {
             if (dto == null)
-                return (false, "Los datos del cliente son nulos.");
+                return (false, "Los datos del cliente son nulos.", null);
 
             if (await _repository.ExistsDniAsync(dto.Dni))
-                return (false, $"Ya existe un cliente activo registrado con el DNI '{dto.Dni}'.");
+                return (false, $"Ya existe un cliente activo registrado con el DNI '{dto.Dni}'.", null);
 
             if (await _repository.ExistsEmailAsync(dto.EMail))
-                return (false, $"El email '{dto.EMail?.Trim()}' ya está registrado por otro cliente.");
+                return (false, $"El email '{dto.EMail?.Trim()}' ya está registrado por otro cliente.", null);
 
             var nuevoCliente = new Cliente
             {
@@ -70,24 +70,36 @@ namespace CineApp.Back.Services.Implementations
                 Activo = true
             };
 
-            bool guardado = await _repository.AddClienteAsync(nuevoCliente);
+            bool created = await _repository.AddClienteAsync(nuevoCliente);
 
-            if (guardado)
-                return (true, "Cliente creado exitosamente.");
-            else
-                return (false, $"Ocurrió un error al intentar crear el cliente '{nuevoCliente.Nombre}, {nuevoCliente.Apellido}'.");
+            if (!created)
+                return (false, $"Ocurrió un error al intentar crear el cliente '{nuevoCliente.Nombre}, {nuevoCliente.Apellido}'.", null);
+
+            var createdClientDto = MapClientToDTO(nuevoCliente);
+
+            return (true, "Cliente creado exitosamente.", createdClientDto);
         }
 
-        public Task<bool> EliminarClienteAsync(int id)
+        public async Task<(bool Exito, string Mensaje, ClienteDTO? DeletedClient)> EliminarClienteAsync(int id)
         {
-            return _repository.DeleteClienteAsync(id);
+            var deletedClient = await ObtenerClientePorIdAsync(id);
+
+            if (deletedClient == null)
+                return (false, $"El cliente no existe en la base de datos.", null);
+
+            bool deleted = await _repository.DeleteClienteAsync(id);
+
+            if (!deleted)
+                return (false, $"Ocurrió un error al intentar eliminar el cliente '{deletedClient.Nombre}, {deletedClient.Apellido}'.", null);
+
+            return (true, "Cliente eliminado exitosamente.", deletedClient);
         }
 
-        public async Task<List<ClienteDTO>> ObtenerTodosClientesAsync()
+        public async Task<List<ClienteDTO>> ObtenerTodosClientesAsync(bool? activo, long? dni)
         {
-            var lstClientes = await _repository.GetAllClientesAsync();
+            var lstClientes = await _repository.GetAllClientesAsync(activo, dni);
 
-            return lstClientes.Select(c => MapearClienteHaciaDTO(c)).ToList();
+            return lstClientes.Select(c => MapClientToDTO(c)).ToList();
         }
 
         public async Task<ClienteDTO?> ObtenerClientePorIdAsync(int id)
@@ -97,10 +109,10 @@ namespace CineApp.Back.Services.Implementations
             if (cliente == null)
                 return null;
 
-            return MapearClienteHaciaDTO(cliente);
+            return MapClientToDTO(cliente);
         }
 
-        private ClienteDTO MapearClienteHaciaDTO(Cliente cliente)
+        private ClienteDTO MapClientToDTO(Cliente cliente)
         {
             return new ClienteDTO
             {
