@@ -19,6 +19,14 @@ namespace CineApp.Back.Repositories.Implementations
             _context = context;
         }
 
+        public async Task<int> GetIdNewComprobanteAsync()
+        {
+            return await _context.Comprobantes
+                .OrderByDescending(c => c.IdComprobante)
+                .Select(c => c.IdComprobante)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<bool> AddComprobanteAsync(Comprobante comprobante)
         {
             await _context.Comprobantes.AddAsync(comprobante);

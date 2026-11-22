@@ -10,6 +10,7 @@ namespace CineApp.Back.Services.Interfaces
 {
     public interface IComprobanteService
     {
+        Task<int> ObtenerIdNuevoComprobanteAsync();
         Task<List<ComprobanteResponseDTO>> ObtenerTodosComprobantesAsync();
 
         Task<ComprobanteResponseDTO?> ObtenerComprobantePorIdAsync(int id);

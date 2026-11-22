@@ -44,7 +44,9 @@ namespace CineApp.WebAPI.Controllers
             if (!creado.Exito)
                 return BadRequest(new { mensaje = creado.Mensaje });
 
-            return Ok(new { mensaje = creado.Mensaje });
+            int id = await _service.ObtenerIdNuevoComprobanteAsync();
+
+            return Ok(new { mensaje = creado.Mensaje, id = id, data = dto });
         }
 
         [HttpPut("{id}")]
@@ -61,7 +63,7 @@ namespace CineApp.WebAPI.Controllers
             if (!actualizado.Exito)
                 return BadRequest(new { mensaje = actualizado.Mensaje });
 
-            return Ok(new { mensaje = actualizado.Mensaje });
+            return Ok(new { mensaje = actualizado.Mensaje, id = id, data = dto});
         }
 
         // DELETE: api/Comprobantes/5

@@ -9,6 +9,7 @@ namespace CineApp.Back.Repositories.Interfaces
 {
     public interface IComprobanteRepository
     {
+        Task<int> GetIdNewComprobanteAsync();
         Task<List<Comprobante>> GetAllComprobantesAsync();
 
         Task<Comprobante?> GetComprobanteByIdAsync(int id);
