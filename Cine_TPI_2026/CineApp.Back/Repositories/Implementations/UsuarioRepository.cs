@@ -1,9 +1,9 @@
 using CineApp.Back.Data;
 using CineApp.Back.Models;
-using CineApp.Back.Repositories.Interface;
+using CineApp.Back.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CineApp.Back.Repositories;
+namespace CineApp.Back.Repositories.Implementations;
 
 public class UsuarioRepository : IUsuarioRepository
 {

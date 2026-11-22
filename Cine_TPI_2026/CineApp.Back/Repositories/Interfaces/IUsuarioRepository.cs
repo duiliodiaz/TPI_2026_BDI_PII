@@ -1,6 +1,6 @@
 using CineApp.Back.Models;
 
-namespace CineApp.Back.Repositories.Interface;
+namespace CineApp.Back.Repositories.Interfaces;
 
 public interface IUsuarioRepository
 {

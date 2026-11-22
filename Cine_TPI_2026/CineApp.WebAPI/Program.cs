@@ -1,15 +1,49 @@
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using CineApp.Back.Data;
-using CineApp.Back.Repositories;
-using CineApp.Back.Repositories.Interface;
 using CineApp.Back.Repositories.Interfaces;
 using CineApp.Back.Repositories.Implementations;
-using CineApp.Back.Services;
-using CineApp.Back.Services.Interface;
+using CineApp.Back.Security;
 using CineApp.Back.Services.Interfaces;
 using CineApp.Back.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// JWT: Issuer, Audience y duración salen de appsettings.json; la clave, de User Secrets.
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? new JwtSettings();
+
+if (Encoding.UTF8.GetByteCount(jwtSettings.Key) < 32)
+{
+    if (!builder.Environment.IsDevelopment())
+        throw new InvalidOperationException("Falta la clave JWT (Jwt:Key) o tiene menos de 32 caracteres.");
+
+    // En desarrollo, sin clave configurada se usa una aleatoria: los tokens dejan de valer al reiniciar.
+    jwtSettings.Key = Convert.ToBase64String(RandomNumberGenerator.GetBytes(48));
+    Console.WriteLine("ADVERTENCIA: no hay Jwt:Key configurada; se usa una clave temporal. " +
+        "Para fijarla: dotnet user-secrets set \"Jwt:Key\" \"<clave de 32+ caracteres>\" --project CineApp.WebAPI");
+}
+
+builder.Services.AddSingleton(jwtSettings);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings.Issuer,
+            ValidateAudience = true,
+            ValidAudience = jwtSettings.Audience,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
 
 // Base de datos (una sola vez)
 builder.Services.AddDbContext<CineDbContext>(options =>
@@ -33,10 +67,35 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Swagger con botón "Authorize" para probar endpoints protegidos pegando el token.
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Pegá el token que devuelve POST /api/auth/login"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -48,6 +107,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

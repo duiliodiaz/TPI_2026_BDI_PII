@@ -1,6 +1,6 @@
 using CineApp.Back.DTOs;
 
-namespace CineApp.Back.Services.Interface;
+namespace CineApp.Back.Services.Interfaces;
 
 public interface IAuthService
 {
