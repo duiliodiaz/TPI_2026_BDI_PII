@@ -22,8 +22,8 @@ namespace CineApp.Back.Services.Implementations
 
         public async Task<(bool Exito, string Mensaje, ClienteDTO? NewClient, TipoError Error)> ActualizarClienteAsync(int id, ClienteRequestDTO dto)
         {
-            if (dto == null)
-                return (false, "Los datos del cliente son nulos.", null, TipoError.Validacion);
+            //if (dto == null)
+            //    return (false, "Los datos del cliente son nulos.", null, TipoError.Validacion);
 
             var clienteExistente = await _repository.GetClienteByIdAsync(id);
 
@@ -52,8 +52,8 @@ namespace CineApp.Back.Services.Implementations
 
         public async Task<(bool Exito, string Mensaje, ClienteDTO? CreatedClient, TipoError Error)> AñadirClienteAsync(ClienteRequestDTO dto)
         {
-            if (dto == null)
-                return (false, "Los datos del cliente son nulos.", null, TipoError.Validacion);
+            //if (dto == null)
+            //    return (false, "Los datos del cliente son nulos.", null, TipoError.Validacion);
 
             if (await _repository.ExistsDniAsync(dto.Dni))
                 return (false, $"Ya existe un cliente activo registrado con el DNI '{dto.Dni}'.", null, TipoError.Conflicto);
@@ -87,6 +87,9 @@ namespace CineApp.Back.Services.Implementations
             if (deletedClient == null)
                 return (false, $"El cliente no existe en la base de datos.", null, TipoError.NoEncontrado);
 
+            if (!deletedClient.Activo)
+                return (false, $"El cliente '{deletedClient.Nombre}, {deletedClient.Apellido}' ya está dado de baja.", null, TipoError.Conflicto);
+
             bool deleted = await _repository.DeleteClienteAsync(id);
 
             if (!deleted)
@@ -99,7 +102,7 @@ namespace CineApp.Back.Services.Implementations
         {
             var lstClientes = await _repository.GetAllClientesAsync(activo, dni);
 
-            return lstClientes.Select(c => MapClientToDTO(c)).ToList();
+            return (lstClientes.Select(c => MapClientToDTO(c)).ToList());
         }
 
         public async Task<ClienteDTO?> ObtenerClientePorIdAsync(int id)

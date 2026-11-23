@@ -23,6 +23,11 @@ namespace CineApp.WebAPI.Controllers
         {
             var lstClientes = await _service.ObtenerTodosClientesAsync(activo, dni);
 
+            if (dni < 1000000 || dni > 99999999)
+                return BadRequest(new { mensaje = $"El DNI '{dni}' ingresado no es válido." }); // dni invalido
+            else if (lstClientes.Count == 0)
+                return NoContent();
+
             return Ok(lstClientes);
         }
 
@@ -32,7 +37,10 @@ namespace CineApp.WebAPI.Controllers
             var cliente = await _service.ObtenerClientePorIdAsync(id);
 
             if (cliente == null)
-                return NotFound(new { mensaje = $"No se encontró un cliente activo con ID '{id}'." });
+                return NotFound(new 
+                {
+                    mensaje = $"No se encontró un cliente activo con ID '{id}'."
+                });
 
             return Ok(cliente);
         }

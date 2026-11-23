@@ -22,7 +22,7 @@ namespace CineApp.Back.Repositories.Interfaces
 
         // métodos auxiliares para validaciones
 
-        Task<bool> ExistsDescripcionAsync(string descripcion, int? idExcluir = null);
+        Task<bool> ExistsProductoAsync(string descripcion, int idTamaño, int? idExcluir = null);
         
         Task<bool> ExistsTipoProductoAsync(int idTipo);
 

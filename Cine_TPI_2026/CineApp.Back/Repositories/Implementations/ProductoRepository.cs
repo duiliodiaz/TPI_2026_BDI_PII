@@ -86,12 +86,12 @@ namespace CineApp.Back.Repositories.Implementations
 
         // Métodos auxiliaraes para validación en service
 
-        public async Task<bool> ExistsDescripcionAsync(string descripcion, int? idExcluir = null)
-        { // verifica si exsite la descripcion, siempre buscando un producto activo,
-            return await _context.Productos.AnyAsync(p =>
-                p.Activo &&
+        public async Task<bool> ExistsProductoAsync(string descripcion, int idTamaño, int? idExcluir = null)
+        { // verifica si exsite la combinacion nombre + tamaño, siempre buscando un producto activo,
+            return await _context.Productos.AnyAsync(p => p.Activo &&
                 p.Descripcion.ToLower() == descripcion.Trim().ToLower() &&
-                (!idExcluir.HasValue || p.IdProducto != idExcluir.Value)); //idExcluir solo sirve para update
+                p.IdTamañoProducto == idTamaño &&
+                (!idExcluir.HasValue || p.IdProducto != idExcluir.Value)); // idExcluir: en el update, ignora el propio producto
         }
         
         public async Task<bool> ExistsTipoProductoAsync(int idTipo)

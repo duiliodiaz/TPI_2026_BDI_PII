@@ -36,8 +36,8 @@ namespace CineApp.Back.Services.Implementations
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
                 return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null, TipoError.Validacion);
 
-            if (await _repository.ExistsDescripcionAsync(dto.Descripcion, id))
-                return (false, $"Ya existe otro producto activo llamado '{dto.Descripcion.Trim()}'.", null, TipoError.Conflicto);
+            if (await _repository.ExistsProductoAsync(dto.Descripcion, dto.IdTamañoProducto, id))
+                return (false, $"Ya existe un producto activo '{dto.Descripcion.Trim()}' en ese tamaño.", null, TipoError.Conflicto);
 
             productoExistente.Descripcion = dto.Descripcion.Trim();
             productoExistente.PreUnitario = dto.PreUnitario;
@@ -68,8 +68,8 @@ namespace CineApp.Back.Services.Implementations
             if (!await _repository.ExistsTamañoProductoAsync(dto.IdTamañoProducto))
                 return (false, $"El tamaño de producto con ID '{dto.IdTamañoProducto}' no existe.", null, TipoError.Validacion);
 
-            if (await _repository.ExistsDescripcionAsync(dto.Descripcion))
-                return (false, $"Ya existe un producto activo llamado '{dto.Descripcion.Trim()}'.", null, TipoError.Conflicto);
+            if (await _repository.ExistsProductoAsync(dto.Descripcion, dto.IdTamañoProducto))
+                return (false, $"Ya existe un producto activo '{dto.Descripcion.Trim()}' en ese tamaño.", null, TipoError.Conflicto);
 
             var nuevoProducto = new Producto
             {
@@ -99,6 +99,9 @@ namespace CineApp.Back.Services.Implementations
 
             if (deletedProduct == null)
                 return (false, "El producto no existe en la base de datos.", null, TipoError.NoEncontrado);
+
+            if (!deletedProduct.Activo)
+                return (false, $"El producto '{deletedProduct.Descripcion}' ya está dado de baja.", null, TipoError.Conflicto);
 
             bool deleted = await _repository.DeleteProductoAsync(id);
 
