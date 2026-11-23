@@ -17,6 +17,10 @@ public partial class Producto
 
     public bool Activo { get; set; } = true;
 
+    public int Stock { get; set; }
+
+    public int StockMinimo { get; set; }
+
     public virtual ICollection<DetallesComprobanteProducto> DetallesComprobanteProductos { get; set; } = new List<DetallesComprobanteProducto>();
 
     public virtual TamañosProducto IdTamañoProductoNavigation { get; set; } = null!;

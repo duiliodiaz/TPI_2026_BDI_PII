@@ -38,10 +38,8 @@ namespace CineApp.Back.Repositories.Implementations
         {
             var comprobante = await GetComprobanteByIdAsync(id);
 
-            if (comprobante == null)
-            {
+            if (comprobante == null || !comprobante.Activo)
                 return false;
-            }
 
             comprobante.Activo = false;
 

@@ -69,6 +69,17 @@ namespace CineApp.Back.Services.Implementations
             if (!formaPagoExiste)
                 return (false, "La forma de pago seleccionada no es válida.", TipoError.Validacion);
 
+            if (comprobanteExistente.DetallesComprobanteProductos != null)
+            {
+                foreach (var detalleViejo in comprobanteExistente.DetallesComprobanteProductos)
+                {
+                    var productoViejo = await _productoRepository.GetProductoByIdAsync(detalleViejo.IdProducto);
+
+                    if (productoViejo != null)
+                        productoViejo.Stock += detalleViejo.CantidadProductos; //devuelvo el stock antes comprado al stock del producto
+                }
+            }
+
             var nuevosDetalles = new List<DetallesComprobanteProducto>();
 
             foreach (var detalle in dto.Detalles)
@@ -80,6 +91,11 @@ namespace CineApp.Back.Services.Implementations
 
                 if (producto == null || !producto.Activo)
                     return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.", TipoError.Validacion);
+
+                if (producto.Stock < detalle.CantidadProductos)
+                    return (false, $"No hay stock suficiende del producto con ID '{detalle.IdProducto}'.", TipoError.Validacion);
+
+                producto.Stock -= detalle.CantidadProductos; // descuento el stock real (nueva cantidad en el dto.detalle)
 
                 nuevosDetalles.Add(new DetallesComprobanteProducto
                 {
@@ -141,6 +157,11 @@ namespace CineApp.Back.Services.Implementations
                 if (producto == null || !producto.Activo)
                     return (false, $"El producto con ID '{detalle.IdProducto}' no existe o fue dado de baja.", TipoError.Validacion);
 
+                if (producto.Stock < detalle.CantidadProductos)
+                    return (false, $"No hay stock suficiende del producto con ID '{detalle.IdProducto}'.", TipoError.Validacion);
+
+                producto.Stock -= detalle.CantidadProductos;
+
                 detallesComprobante.Add(new DetallesComprobanteProducto
                 {
                     IdProducto = detalle.IdProducto,
@@ -168,6 +189,22 @@ namespace CineApp.Back.Services.Implementations
 
         public async Task<bool> EliminarComprobanteAsync(int id)
         {
+            var comprobante = await _comprobanteRepository.GetComprobanteByIdAsync(id);
+
+            if (comprobante == null || !comprobante.Activo)
+                return false;
+
+            if (comprobante.DetallesComprobanteProductos != null)
+            {
+                foreach (var detalle in comprobante.DetallesComprobanteProductos)
+                {
+                    var producto = await _productoRepository.GetProductoByIdAsync(detalle.IdProducto);
+
+                    if (producto != null)
+                        producto.Stock += detalle.CantidadProductos;
+                }
+            }
+
             return await _comprobanteRepository.DeleteComprobanteAsync(id);
         }
 
@@ -176,13 +213,9 @@ namespace CineApp.Back.Services.Implementations
             var comprobante = await _comprobanteRepository.GetComprobanteByIdAsync(id);
 
             if (comprobante == null)
-            {
                 return null;
-            }
             else
-            {
                 return MapearComprobanteHaciaDTO(comprobante);
-            }
         }
 
         public async Task<List<FormasPago>> ObtenerTodasFormasPagoAsync()

@@ -9,13 +9,12 @@ namespace CineApp.Back.DTOs
 {
     public class ProductoRequestDTO
     {
-
         [Required(ErrorMessage = "La descripción del producto es obligatoria.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "La descripción debe tener entre 3 y 100 caracteres.")]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$", ErrorMessage = "La descripción solo puede contener letras, números y espacios.")]
         public string Descripcion { get; set; } = null!;
 
         [Required(ErrorMessage = "El precio unitario es obligatorio.")]
-        [Range(0.01, 9999999.99, ErrorMessage = "El precio debe ser mayor a $0.")]
         public decimal PreUnitario { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar un tipo de producto.")]
@@ -27,6 +26,14 @@ namespace CineApp.Back.DTOs
         public int IdTamañoProducto { get; set; }
 
         public bool Activo { get; set; } = true;
+
+        [Required(ErrorMessage = "El stock es obligatorio.")]
+        [Range(0, 5000, ErrorMessage = "El stock debe estar entre 0 y 5000 unidades.")]
+        public int Stock { get; set; }
+
+        [Required(ErrorMessage = "El stock es obligatorio.")]
+        [Range(0, 5000, ErrorMessage = "El stock debe estar entre 0 y 5000 unidades.")]
+        public int StockMinimo { get; set; }
     }
 
     public class ProductoResponseDTO
@@ -46,5 +53,9 @@ namespace CineApp.Back.DTOs
         public string TamañoProductoNombre { get; set; }
 
         public bool Activo { get; set; } = true;
+
+        public int Stock { get; set; }
+
+        public int StockMinimo { get; set; }
     }
 }

@@ -30,6 +30,12 @@ namespace CineApp.Back.Services.Implementations
             if (productoExistente == null)
                 return (false, $"No se encontró un producto con ID '{id}'.", null, TipoError.NoEncontrado);
 
+            if (dto.PreUnitario <= 0)
+                return (false, $"El precio debe ser superior a $0", null, TipoError.Validacion);
+
+            if (dto.PreUnitario > 10000000)
+                return (false, $"El precio debe ser inferior a $10.000.000", null, TipoError.Validacion);
+
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
                 return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null, TipoError.Validacion);
 
