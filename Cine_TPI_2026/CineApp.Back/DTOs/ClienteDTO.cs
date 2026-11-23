@@ -25,6 +25,7 @@ namespace CineApp.Back.DTOs
         [Range(1000000, 99999999, ErrorMessage = "El DNI debe ser un número válido de 7 u 8 dígitos.")]
         public long Dni { get; set; }
 
+        [Required(ErrorMessage = "El Email es obligatorio.")]
         [EmailAddress(ErrorMessage = "El formato del correo electrónico no es válido.")]
         [StringLength(100, ErrorMessage = "El email no puede superar los 100 caracteres.")]
         public string? EMail { get; set; }
