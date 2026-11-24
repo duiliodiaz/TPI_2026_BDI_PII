@@ -18,6 +18,9 @@ namespace CineApp.Back.Services.Implementations
         private readonly IProductoRepository _productoRepository;
         private readonly IClienteRepository _clienteRepository;
 
+        // SQL Server (datetime) no acepta fechas anteriores a 1753
+        private static readonly DateTime FechaMinima = new DateTime(2000, 1, 1);
+
         public ComprobanteService(
             IComprobanteRepository comprobanteRepository,
             IFormaPagoRepository formaPagoRepository,
@@ -58,6 +61,9 @@ namespace CineApp.Back.Services.Implementations
             // no permite fechas posteriores a ahora
             if (fechaComprobante > DateTime.Now)
                 return (false, "La fecha del comprobante no puede ser futura.", TipoError.Validacion);
+
+            if (fechaComprobante < FechaMinima)
+                return (false, $"La fecha del comprobante no puede ser anterior al {FechaMinima:dd/MM/yyyy}.", TipoError.Validacion);
 
             var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
             // validar cliente existente y activo
@@ -113,7 +119,7 @@ namespace CineApp.Back.Services.Implementations
             var actualizado = await _comprobanteRepository.UpdateComprobanteAsync(comprobanteExistente, nuevosDetalles);
 
             if (actualizado)
-                return (true, "Comprobante registrado correctamente.", TipoError.Ninguno);
+                return (true, "Comprobante actualizado correctamente.", TipoError.Ninguno);
             else
                 return (false, "Ocurrió un error al intentar actualizar el comprobante.", TipoError.Interno);
         }
@@ -134,6 +140,9 @@ namespace CineApp.Back.Services.Implementations
 
             if (fechaComprobante > DateTime.Now)
                 return (false, "La fecha del comprobante no puede ser futura.", TipoError.Validacion);
+
+            if (fechaComprobante < FechaMinima)
+                return (false, $"La fecha del comprobante no puede ser anterior al {FechaMinima:dd/MM/yyyy}.", TipoError.Validacion);
 
             var cliente = await _clienteRepository.GetClienteByIdAsync(dto.IdCliente);
 
@@ -242,6 +251,7 @@ namespace CineApp.Back.Services.Implementations
                 Fecha = comprobante.Fecha,
                 IdFormaPago = comprobante.IdFormaPago,
                 FormaPagoNombre = comprobante.IdFormaPagoNavigation?.Descripcion ?? string.Empty,
+                Activo = comprobante.Activo,
 
                 Detalles = comprobante.DetallesComprobanteProductos.Select(d => new DetalleComprobanteResponseDTO
                 {

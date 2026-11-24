@@ -54,6 +54,7 @@ namespace CineApp.Back.DTOs
         [StringLength(100, ErrorMessage = "El email no puede superar los 100 caracteres.")]
         public string? EMail { get; set; }
 
-        public bool Activo { get; set; } = true;
+        // null = no se modifica el estado (solo se usa en el PUT)
+        public bool? Activo { get; set; }
     }
 }

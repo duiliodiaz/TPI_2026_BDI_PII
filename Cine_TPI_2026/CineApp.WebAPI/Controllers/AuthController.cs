@@ -1,5 +1,6 @@
 using CineApp.Back.DTOs;
 using CineApp.Back.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineApp.WebAPI.Controllers;
@@ -16,6 +17,8 @@ public class AuthController : ControllerBase
     }
 
     // POST: api/auth/login
+    // Único endpoint abierto: es el que entrega el token.
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto request)
     {

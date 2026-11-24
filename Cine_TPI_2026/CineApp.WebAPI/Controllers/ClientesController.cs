@@ -2,11 +2,13 @@
 using CineApp.Back.Models;
 using CineApp.Back.Services.Implementations;
 using CineApp.Back.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineApp.WebAPI.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase

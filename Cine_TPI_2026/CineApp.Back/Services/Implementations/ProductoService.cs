@@ -49,7 +49,12 @@ namespace CineApp.Back.Services.Implementations
             productoExistente.PreUnitario = dto.PreUnitario;
             productoExistente.IdTipoProducto = dto.IdTipoProducto;
             productoExistente.IdTamañoProducto = dto.IdTamañoProducto;
-            productoExistente.Activo = dto.Activo;
+            productoExistente.Stock = dto.Stock;
+            productoExistente.StockMinimo = dto.StockMinimo;
+
+            // solo cambia el estado si lo mandan explícitamente
+            if (dto.Activo.HasValue)
+                productoExistente.Activo = dto.Activo.Value;
 
             bool updated = await _repository.UpdateProductoAsync(productoExistente);
 
@@ -68,6 +73,12 @@ namespace CineApp.Back.Services.Implementations
             if (dto == null)
                 return (false, "Los datos del producto son nulos.", null, TipoError.Validacion);
 
+            if (dto.PreUnitario <= 0)
+                return (false, $"El precio debe ser superior a $0", null, TipoError.Validacion);
+
+            if (dto.PreUnitario > 10000000)
+                return (false, $"El precio debe ser inferior a $10.000.000", null, TipoError.Validacion);
+
             if (!await _repository.ExistsTipoProductoAsync(dto.IdTipoProducto))
                 return (false, $"El tipo de producto con ID '{dto.IdTipoProducto}' no existe.", null, TipoError.Validacion);
 
@@ -83,6 +94,8 @@ namespace CineApp.Back.Services.Implementations
                 PreUnitario = dto.PreUnitario,
                 IdTipoProducto = dto.IdTipoProducto,
                 IdTamañoProducto = dto.IdTamañoProducto,
+                Stock = dto.Stock,
+                StockMinimo = dto.StockMinimo,
                 Activo = true
             };
 
@@ -148,6 +161,8 @@ namespace CineApp.Back.Services.Implementations
                 TamañoProductoNombre = producto.IdTamañoProductoNavigation?.Descripcion ?? "Sin Tamaño",
 
                 Activo = producto.Activo,
+                Stock = producto.Stock,
+                StockMinimo = producto.StockMinimo
             };
         }
     }
