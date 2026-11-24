@@ -40,7 +40,10 @@ namespace CineApp.Back.Services.Implementations
             clienteExistente.Apellido = dto.Apellido.Trim();
             clienteExistente.Dni = dto.Dni;
             clienteExistente.EMail = dto.EMail;
-            clienteExistente.Activo = dto.Activo;
+
+            // solo cambia el estado si lo mandan explícitamente
+            if (dto.Activo.HasValue)
+                clienteExistente.Activo = dto.Activo.Value;
 
             bool updated = await _repository.UpdateClienteAsync(clienteExistente);
 

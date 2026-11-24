@@ -25,7 +25,8 @@ namespace CineApp.Back.DTOs
         [Range(1, int.MaxValue, ErrorMessage = "El ID de tamaño de producto debe ser válido.")]
         public int IdTamañoProducto { get; set; }
 
-        public bool Activo { get; set; } = true;
+        // null = no se modifica el estado (solo se usa en el PUT)
+        public bool? Activo { get; set; }
 
         [Required(ErrorMessage = "El stock es obligatorio.")]
         [Range(0, 5000, ErrorMessage = "El stock debe estar entre 0 y 5000 unidades.")]

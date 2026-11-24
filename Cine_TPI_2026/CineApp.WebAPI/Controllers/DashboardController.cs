@@ -29,6 +29,10 @@ public class DashboardController : ControllerBase
     [HttpGet("ingresos-semana")]
     public async Task<ActionResult<IngresosSemanaDto>> GetIngresosSemana([FromQuery] DateTime? fecha)
     {
+        // Fechas extremas (0001, 9999) hacen fallar a SQL Server.
+        if (fecha.HasValue && (fecha.Value.Year < 2000 || fecha.Value.Year > 2100))
+            return BadRequest(new { mensaje = "La fecha debe estar entre los años 2000 y 2100." });
+
         return Ok(await _service.ObtenerIngresosSemana(fecha ?? DateTime.Today));
     }
 
