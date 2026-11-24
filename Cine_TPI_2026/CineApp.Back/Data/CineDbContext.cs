@@ -425,6 +425,8 @@ public partial class CineDbContext : DbContext
             entity.Property(e => e.PreUnitario)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("pre_unitario");
+            entity.Property(e => e.Stock).HasColumnName("stock");
+            entity.Property(e => e.StockMinimo).HasColumnName("stock_minimo");
 
             entity.HasOne(d => d.IdTamañoProductoNavigation).WithMany(p => p.Productos)
                 .HasForeignKey(d => d.IdTamañoProducto)
