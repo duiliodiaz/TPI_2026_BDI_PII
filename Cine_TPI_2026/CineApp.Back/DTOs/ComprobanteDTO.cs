@@ -39,6 +39,8 @@ namespace CineApp.Back.DTOs
 
         public string FormaPagoNombre { get; set; } = string.Empty;
 
+        public bool Activo { get; set; }
+
         public decimal Total => Detalles.Sum(d => d.Subtotal);
 
         public List<DetalleComprobanteResponseDTO> Detalles { get; set; } = new();

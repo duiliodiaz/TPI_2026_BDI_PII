@@ -242,6 +242,7 @@ namespace CineApp.Back.Services.Implementations
                 Fecha = comprobante.Fecha,
                 IdFormaPago = comprobante.IdFormaPago,
                 FormaPagoNombre = comprobante.IdFormaPagoNavigation?.Descripcion ?? string.Empty,
+                Activo = comprobante.Activo,
 
                 Detalles = comprobante.DetallesComprobanteProductos.Select(d => new DetalleComprobanteResponseDTO
                 {
