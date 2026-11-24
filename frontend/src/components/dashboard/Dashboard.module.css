@@ -1,0 +1,237 @@
+/* Dashboard.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+.dash {
+  --bg-header: #131318;
+  --card: #0d1117;
+  --card-dark: #16171d;
+  --border: #2f323d;
+  --purple: #8b5cf6;
+  --purple-soft: #a78bfa;
+  --orange: #f59e0b;
+  --green: #34d399;
+  --muted: #8b8fa0;
+  --light: #b4b7c4;
+  font-family: "Outfit", sans-serif;
+ 
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.dashHeader {
+  background: var(--bg-header);
+  height: 80px;
+}
+
+.pillBadge {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--purple-soft);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 13px;
+}
+
+.dcard {
+  background: var(--card);
+  border-radius: 20px;
+  color: #fff;
+  border: 1px solid #2c313c;
+}
+
+/* KPIs */
+.stat {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 147px;
+}
+.statLabel {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin: 0 0 6px;
+  max-width: 110px;
+}
+.statValue {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+}
+.statNote {
+  font-size: 12px;
+  max-width: 150px;
+}
+
+/* Colores de texto / fondo */
+.textOrange { color: var(--orange); }
+.textPurple { color: var(--purple-soft); }
+.textGreen  { color: var(--green); }
+.textMutedD { color: var(--muted); }
+.textLightD { color: var(--light); }
+.bgPurple   { background: var(--purple); }
+.bgOrange   { background: var(--orange); }
+
+/* Icon box */
+.iconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+.tonePurple {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--purple-soft);
+  border-color: rgba(139, 92, 246, 0.35);
+}
+.toneGreen {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--green);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.toneOrange {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--orange);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* Títulos */
+.cardTitle {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+.cardSub {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+/* Leyenda */
+.legend {
+  font-size: 13px;
+  color: var(--light);
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+
+/* Gráfico */
+.chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 240px;
+  margin-top: 24px;
+}
+.chartCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14%;
+}
+.bars {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 150px;
+}
+.bar {
+  width: 17px;
+  border-radius: 4px 4px 0 0;
+  display: block;
+}
+.barPurple { background: var(--purple); }
+.barOrange { background: #d98e0b; }
+
+.peakTip {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3a2e12;
+  color: var(--orange);
+  border: 1px solid #7a5a12;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--light);
+}
+.day strong { font-weight: 500; }
+.day small  { font-size: 11px; color: var(--muted); }
+.day.peak strong { color: #fff; font-weight: 700; }
+.day.peak small  { color: var(--orange); }
+
+/* Fechas destacadas */
+.dayCard {
+  background: var(--card-dark);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+}
+.dayCard.active {
+  border-color: #5c4413;
+}
+
+/* Listas */
+.linkPurple,
+.linkOrange {
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.linkPurple { color: var(--purple-soft); }
+.linkOrange { color: var(--orange); }
+
+.rowItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+.itemName {
+  font-size: 15px;
+  font-weight: 500;
+}
+.itemTotal {
+  font-size: 16px;
+  font-weight: 700;
+}
+.poster {
+  width: 40px;
+  height: 56px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-dark);
+  flex-shrink: 0;
+}
+.prodFooter {
+  background: var(--card-dark);
+  padding: 18px 24px;
+  font-size: 12px;
+}

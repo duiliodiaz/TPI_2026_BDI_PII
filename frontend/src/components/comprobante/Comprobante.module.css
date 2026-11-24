@@ -1,0 +1,140 @@
+.rowInactive th,
+.rowInactive td {
+    background: rgba(244, 63, 94, 0.06) !important;
+}
+
+.rowInactive{
+    opacity: 0.7;
+}
+.numero {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-weight: 700;
+}
+
+.fecha {
+    color: #c3c8d6;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.avatar {
+    flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #a78bfa
+}
+
+.name {
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.clientCode {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: .68rem;
+    color: #8b93a7;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.pago_credito {
+    color: #a78bfa;
+    background: rgba(124, 58, 237, .15);
+    border-color: rgba(124, 58, 237, .4);
+}
+
+.pago_transferencia {
+    color: #22d3ee;
+    background: rgba(6, 182, 212, .14);
+    border-color: rgba(6, 182, 212, .4);
+}
+
+.pago_efectivo {
+    color: #34d399;
+    background: rgba(16, 185, 129, .14);
+    border-color: rgba(16, 185, 129, .4);
+}
+
+.pago_debito {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .14);
+    border-color: rgba(245, 158, 11, .4);
+}
+
+.statusOn {
+    color: #34d399;
+    background: rgba(16, 185, 129, .14);
+    border-color: rgba(16, 185, 129, .4);
+}
+
+.statusOff {
+    color: #fb7185;
+    background: rgba(244, 63, 94, .14);
+    border-color: rgba(244, 63, 94, .4);
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.actions {
+    min-width: 110px;
+}
+
+.iconButton {
+    padding: 4px;
+    line-height: 0;
+    background: transparent;
+    border-radius: 6px;
+    transition: transform .15s;
+}
+
+.iconButton:hover {
+    transform: scale(1.15);
+}
+
+.iconButton:focus-visible {
+    outline: 2px solid #a78bfa;
+}
+
+.view {
+    color: #c3c8d6;
+}
+
+.edit {
+    color: #a78bfa;
+}
+
+.remove {
+    color: #fb7185;
+}
+
+.habilitar {
+    background: rgba(16, 185, 129, .14);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, .4);
+    border-radius: 8px;
+    padding: 4px 14px;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.habilitar:hover {
+    background: rgba(16, 185, 129, .25);
+}

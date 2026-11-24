@@ -1,0 +1,62 @@
+.headIcon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.green {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.violet {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.mono {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+/* Ícono automático (solo en "Nuevo producto") */
+.autoIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--m-field);
+  border: 1px solid var(--m-field-line);
+  border-radius: 12px;
+}
+
+.iconTile {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: #f59e0b;
+  background: rgba(245, 27, 11, 0.13);
+  border: 1px solid rgba(245, 19, 11, 0.301);
+}
+
+.autoTitle {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--m-text);
+}
+
+.autoSub {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--m-muted);
+}
+.error {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  color: #f87171;
+}

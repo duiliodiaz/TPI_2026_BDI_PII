@@ -1,0 +1,124 @@
+.avatar {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: var(--c-violet-soft);
+}
+
+.name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.star {
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--c-amber);
+}
+
+.clientId {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  color: var(--c-muted);
+}
+
+.dni {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  color: #c9d0dc;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #d3d9e4;
+}
+
+/* Estado */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.statusOn {
+  color: var(--c-green);
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.statusOff {
+  color: var(--c-red);
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.3);
+}
+.habilitar {
+  padding: 0.3rem 0.75rem;
+  color: var(--c-green);
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+  border-radius: 8px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+/* Fila inactiva */
+.rowInactive th,
+.rowInactive td {
+  --bs-table-bg: rgba(248, 113, 113, 0.06);
+}
+
+.rowInactive .name,
+.rowInactive .email,
+.rowInactive .dni {
+  color: var(--c-muted);
+}
+
+.rowInactive .avatar,
+.rowInactive .actions {
+  opacity: 0.55;
+}
+
+/* Acciones */
+.iconButton {
+  padding: 0.3rem 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1;
+  border-radius: 8px;
+}
+
+.iconButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--c-violet-soft);
+  outline-offset: 2px;
+}
+
+.edit {
+  color: var(--c-violet-soft);
+}
+
+.remove {
+  color: var(--c-red);
+}

@@ -1,0 +1,73 @@
+
+[
+  {
+    "title": "Inception",
+    "poster": "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+    "minutes": 148,
+    "rating": 8.8,
+    "formats": ["4D E-Motion", "2D", "Comfort", "D-Box"]
+  },
+  {
+    "title": "Interstellar",
+    "poster": "https://imgs.search.brave.com/1uRvv63OwPUBwzbS3DxwBTt8509oAH4hotlzy6dEoyI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9lcy53/ZWIuaW1nMy5hY3N0/YS5uZXQvY18zMDBf/MzAwL2ltZy8wOC9m/ZS8wOGZlYWVjYmM1/NmM0ODBjMDgyMDAz/YzYzMmYzYmMyZi5q/cGc",
+    "minutes": 169,
+    "rating": 8.7,
+    "formats": ["4D E-Motion", "2D", "Comfort", "XD"]
+  },
+  {
+    "title": "The Dark Knight",
+    "poster": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    "minutes": 152,
+    "rating": 9.0,
+    "formats": ["2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "Fight Club",
+    "poster": "https://imgs.search.brave.com/XqRfk76RNgvXbKUdhxRRzIhnu3JmV-Ej41JSCqQzuhw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50aGVtb3ZpZWRi/Lm9yZy90L3AvdzMw/MF9hbmRfaDQ1MF9m/YWNlL2pTemlpb1N3/UFZyT3k5WW93M1ho/V0lCRGpxMS5qcGc",
+    "minutes": 139,
+    "rating": 8.8,
+    "formats": ["4D E-Motion", "2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "The Matrix",
+    "poster": "https://imgs.search.brave.com/Pxe_uH9k1MMKi6G__jUQfdyH7VNr38ILbxFs02dQzGg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pcnMu/d3d3Lndhcm5lcmJy/b3MuY29tL2tleWFy/dC1qcGVnL21vdmll/cy9tZWRpYS9icm93/c2VyL01hdHJpeF8y/MDAweDMwMDAuSlBF/Rw",
+    "minutes": 136,
+    "rating": 8.7,
+    "formats": ["2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "Gladiator",
+    "poster": "https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",
+    "minutes": 155,
+    "rating": 8.5,
+    "formats":["4D E-Motion", "2D", "Comfort", "D-Box"]
+  },
+  {
+    "title": "Avengers: Endgame",
+    "poster": "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+    "minutes": 181,
+    "rating": 8.4,
+    "formats": ["4D E-Motion", "2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "Forrest Gump",
+    "poster": "https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
+    "minutes": 142,
+    "rating": 8.8,
+    "formats":["4D E-Motion", "2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "Pulp Fiction",
+    "poster": "https://image.tmdb.org/t/p/w500/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
+    "minutes": 154,
+    "rating": 8.9,
+    "formats": ["4D E-Motion", "2D", "Comfort", "XD", "D-Box"]
+  },
+  {
+    "title": "The Shawshank Redemption",
+    "poster": "https://imgs.search.brave.com/_sKq3YyoUsk_XLCy4eBvSh0jrgK1sb84YdIN8_66yLU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzL3hM/TW5mb3owTUxLTVJn/PT0vYTMyNzI2ZDEt/MTlkNC00OWEyLThl/NDctMDc2Njg5MGM4/YjE5L0NKZ0RFTWNF/T2dVeExqRXVPUT09",
+    "minutes": 142,
+    "rating": 9.3,
+    "formats": ["4D E-Motion", "2D", "Comfort", "XD", "D-Box"]
+  }
+]

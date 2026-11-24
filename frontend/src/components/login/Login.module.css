@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@700&display=swap');
+
+.root {
+  --cp-bg: #0a0a14;
+  --cp-field: #12121f;
+  --cp-line: #2a2a3c;
+  --cp-orange: #f59e0b;
+  --cp-violet: #a78bfa;
+  --cp-text: #ffffff;
+  --cp-muted: #8d8da3;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  min-height: 100vh;
+}
+.heading { font-family: 'Outfit', sans-serif; letter-spacing: -0.03em; }
+.mono { font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: .12em; }
+
+/* ---------- Panel izquierdo ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 3rem;
+  background:
+    radial-gradient(circle at 100% 22%, #f4b8a8 0, #c98a9a 3%, rgba(150,90,150,.55) 9%, rgba(80,50,120,.0) 22%),
+    radial-gradient(ellipse 70% 40% at 15% 30%, rgba(120,80,60,.45), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 40% 100%, rgba(120,70,150,.55), transparent 70%),
+    linear-gradient(160deg, #1a1530 0%, #20193d 45%, #2a1d4a 100%);
+}
+.hero::before { /* campo de estrellas */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 20% 15%, #fff8 50%, transparent 51%),
+    radial-gradient(1px 1px at 60% 10%, #fff6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 78% 38%, #fff7 50%, transparent 51%),
+    radial-gradient(1px 1px at 35% 48%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 70%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 12% 62%, #fff4 50%, transparent 51%);
+}
+.hero > * { position: relative; z-index: 1; }
+.brand { font-size: 1.65rem; font-weight: 600; color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: .75rem; }
+.brand span { color: var(--cp-violet); }
+.badge {
+  font-size: .68rem; color: var(--cp-orange);
+  border: 1px solid rgba(245,158,11,.45); background: rgba(245,158,11,.1);
+  border-radius: 999px; padding: .5rem 1rem;
+}
+.kicker { color: var(--cp-orange); font-size: .75rem; }
+.title { font-size: clamp(2.4rem, 4.2vw, 3.5rem); font-weight: 700; line-height: 1.02; max-width: 30rem; }
+.lead { color: #c9c4dc; font-size: 1.05rem; line-height: 1.7; max-width: 32rem; font-weight: 300; }
+.stats { border-top: 1px solid rgba(255,255,255,.14); padding-top: 1.5rem; max-width: 32.5rem; }
+.statValue { font-size: 1.6rem; font-weight: 700; margin: 0; }
+.statLabel { color: #a9a4bd; font-size: .85rem; margin: 0; }
+.secure { color: #8f89a8; font-size: .85rem; }
+
+/* ---------- Panel derecho ---------- */
+.formWrap { max-width: 28rem; width: 100%; }
+.back { color: #b9b9cc; text-decoration: none; font-weight: 500; font-size: .95rem; display: inline-flex; gap: .75rem; align-items: center; }
+.back:hover { color: #fff; }
+.label { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #d4d4e4; margin-bottom: .6rem; }
+.inputGroup { position: relative; }
+.inputGroup .icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--cp-muted); pointer-events: none; display: flex; }
+.input {
+  background: var(--cp-field); color: #fff;
+  border: 1px solid var(--cp-line); border-radius: 999px;
+  height: 3.1rem; padding: 0 3rem 0 3.1rem; font-size: .95rem;
+}
+.input::placeholder { color: #5f5f77; }
+.input:focus { background: var(--cp-field); color: #fff; border-color: var(--cp-violet); box-shadow: 0 0 0 .2rem rgba(167,139,250,.25); }
+.toggle { position: absolute; right: .9rem; top: 50%; transform: translateY(-50%); background: none; border: 0; color: var(--cp-muted); display: flex; padding: .25rem; }
+.toggle:hover { color: #fff; }
+.link { color: var(--cp-violet); text-decoration: none; font-weight: 500; }
+.link:hover { color: #c4b5fd; text-decoration: underline; }
+.check:global(.form-check-input) { background-color: var(--cp-field); border-color: var(--cp-line); width: 1.1rem; height: 1.1rem; border-radius: 50%; }
+.check:global(.form-check-input):checked { background-color: var(--cp-orange); border-color: var(--cp-orange); }
+.check:global(.form-check-input):focus { box-shadow: 0 0 0 .2rem rgba(245,158,11,.25); border-color: var(--cp-orange); }
+.submit {
+  background: var(--cp-orange); color: #1a1205; border: 0; border-radius: 999px;
+  height: 3.1rem; font-weight: 700; font-size: .85rem; letter-spacing: .06em; text-transform: uppercase;
+  box-shadow: 0 10px 28px rgba(245,158,11,.28);
+}
+.submit:hover, .submit:focus-visible { background: #fbbf24; color: #1a1205; }
+.divider { display: flex; align-items: center; gap: 1rem; color: #6b6b82; font-size: .8rem; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #1f1f30; }
+.google {
+  background: var(--cp-field); color: #fff; border: 1px solid var(--cp-line); border-radius: 999px;
+  height: 2.9rem; min-width: 14.5rem; font-weight: 600; font-size: .9rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+}
+.google:hover { background: #1a1a2b; color: #fff; border-color: #3a3a52; }
+.muted { color: var(--cp-muted); }
+.copy { color: #6b6b82; font-size: .8rem; }
+.root a:focus-visible, .root button:focus-visible { outline: 2px solid var(--cp-violet); outline-offset: 3px; }
+
+/* ---------- Validación y errores ---------- */
+.inputInvalid, .inputInvalid:focus { border-color: #f87171; }
+.inputInvalid:focus { box-shadow: 0 0 0 .2rem rgba(248,113,113,.25); }
+.fieldError { color: #fca5a5; font-size: .8rem; margin: .5rem 0 0 1.1rem; }
+.alertError {
+  color: #fecaca; background: rgba(248,113,113,.1);
+  border: 1px solid rgba(248,113,113,.45); border-radius: 1rem;
+  padding: .75rem 1rem; font-size: .88rem;
+}
+.submit:disabled { opacity: .65; cursor: not-allowed; box-shadow: none; }
+@media (max-width: 991.98px) {
+  .hero { min-height: auto; padding: 2rem 1.5rem 2.5rem; }
+}

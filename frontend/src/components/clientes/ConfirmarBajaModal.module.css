@@ -1,0 +1,75 @@
+.content {
+  min-height: 28rem;
+  padding: 2.5rem 2rem;
+}
+
+.icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1.5rem;
+  border-radius: 14px;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: #fb7185;
+  font-size: 1.5rem;
+}
+
+.title {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.text {
+  max-width: 32ch;
+  margin: 0 0 1.75rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #aab2c0;
+}
+
+.text strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.cancel,
+.confirm {
+  --bs-btn-padding-x: 1.1rem;
+  --bs-btn-padding-y: 0.55rem;
+  --bs-btn-font-size: 0.85rem;
+  --bs-btn-border-radius: 10px;
+}
+
+.cancel {
+  --bs-btn-color: #c9d0dc;
+  --bs-btn-bg: #151a23;
+  --bs-btn-border-color: #151a23;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #1d2430;
+  --bs-btn-hover-border-color: #1d2430;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #232b38;
+  --bs-btn-active-border-color: #232b38;
+}
+
+.confirm {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--m-red);
+  --bs-btn-border-color: var(--m-red);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #f43f5e;
+  --bs-btn-hover-border-color: #f43f5e;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #be123c;
+  --bs-btn-active-border-color: #be123c;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+}
+
+.cancel:focus-visible,
+.confirm:focus-visible {
+  outline: 2px solid #fb7185;
+  outline-offset: 2px;
+}

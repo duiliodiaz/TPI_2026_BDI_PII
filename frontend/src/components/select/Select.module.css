@@ -1,0 +1,23 @@
+
+.wrap {
+  position: relative;
+}
+
+/* select.select (más específico) para ganarle a .form-control y al estilo del campo */
+select.select {
+  appearance: none;
+  padding-right: 2.25rem;
+  color-scheme: dark;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 0.9rem;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: #7a8294;
+  pointer-events: none;
+}

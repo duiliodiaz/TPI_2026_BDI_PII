@@ -1,0 +1,171 @@
+.hero {
+  position: relative;
+  min-height: 560px;
+  background-color: #0d0d14;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(13, 13, 20, 0.92) 0%, rgba(13, 13, 20, 0.55) 45%, rgba(13, 13, 20, 0.1) 100%),
+    linear-gradient(to top, #0d0d14 0%, transparent 30%);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 0;
+}
+
+.tag {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #f59e0b;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  max-width: 14ch;
+  margin: 0 0 1.25rem;
+}
+
+.synopsis {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #d4d4dc;
+  max-width: 480px;
+  margin: 0 0 1.75rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.buy,
+.trailer {
+  --bs-btn-padding-x: 1.4rem;
+  --bs-btn-padding-y: 0.65rem;
+  --bs-btn-font-size: 0.8rem;
+  --bs-btn-font-weight: 600;
+  --bs-btn-border-radius: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.buy {
+  --bs-btn-bg: #fff;
+  --bs-btn-color: #0d0d14;
+  --bs-btn-border-color: #fff;
+  --bs-btn-hover-bg: #e5e5ea;
+  --bs-btn-hover-color: #0d0d14;
+  --bs-btn-hover-border-color: #e5e5ea;
+  --bs-btn-active-bg: #d4d4dc;
+  --bs-btn-active-color: #0d0d14;
+  --bs-btn-active-border-color: #d4d4dc;
+}
+
+.trailer {
+  --bs-btn-bg: rgba(40, 40, 52, 0.85);
+  --bs-btn-color: #fff;
+  --bs-btn-border-color: rgba(255, 255, 255, 0.12);
+  --bs-btn-hover-bg: rgba(60, 60, 76, 0.95);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-border-color: rgba(255, 255, 255, 0.2);
+  --bs-btn-active-bg: rgba(60, 60, 76, 1);
+  --bs-btn-active-color: #fff;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(13, 13, 20, 0.7);
+  color: #fff;
+}
+
+.arrow:hover {
+  background-color: rgba(13, 13, 20, 0.95);
+}
+
+.arrow:focus-visible,
+.dot:focus-visible {
+  outline: 2px solid #8b6cf6;
+  outline-offset: 2px;
+}
+
+.arrowPrev {
+  left: 1rem;
+}
+
+.arrowNext {
+  right: 1rem;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dot {
+  display: block;
+  width: 6px;
+  height: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.35);
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.dotActive {
+  width: 20px;
+  background-color: #fff;
+}
