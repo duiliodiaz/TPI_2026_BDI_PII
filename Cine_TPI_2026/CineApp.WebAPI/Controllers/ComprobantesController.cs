@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CineApp.WebAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrador")]
     [Route("api/[controller]")]
     [ApiController]
     public class ComprobantesController : ControllerBase
